@@ -8,552 +8,934 @@
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Zen+Kaku+Gothic+New:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #1a1a1a;
-    --paper: #f5f0e8;
-    --red: #c0392b;
-    --muted: #8a8074;
-    --light: #e8e0d0;
-    --white: #faf7f2;
-    --sakura: #f4b8c8;
-    --sakura-pale: #fce8ef;
+    --sakura:    #f2a7c3;
+    --sakura-l:  #fce4ef;
+    --sakura-ll: #fff0f6;
+    --violet:    #6b3fa0;
+    --violet-l:  #9b6fcf;
+    --violet-ll: #e8d8f8;
+    --white:     #ffffff;
+    --soft:      #fdf6fb;
+    --ink:       #2a1a3e;
+    --muted:     #9b7db0;
+    --gold:      #e8b86d;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
 
   body {
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    background: var(--paper);
+    font-family:'Zen Kaku Gothic New',sans-serif;
+    background: var(--soft);
     color: var(--ink);
     overflow-x: hidden;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,0,0,0.025) 39px, rgba(0,0,0,0.025) 40px);
-    pointer-events: none;
-    z-index: 0;
   }
 
   /* ── NAV ── */
   nav {
     position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 200;
+    top:0; left:0; right:0;
+    z-index: 300;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1.4rem 3rem;
-    background: rgba(245,240,232,0.92);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(0,0,0,0.07);
+    padding: 1.2rem 3rem;
+    background: rgba(255,240,246,0.88);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(242,167,195,0.3);
   }
 
   .nav-logo {
-    font-family: 'Shippori Mincho', serif;
+    font-family:'Shippori Mincho',serif;
     font-size: 1.3rem;
     font-weight: 800;
-    color: var(--ink);
-    text-decoration: none;
+    color: var(--violet);
+    cursor: pointer;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    cursor: pointer;
   }
 
-  .nav-logo span { color: var(--red); font-size: 1.6rem; }
+  .nav-logo-dot {
+    width: 10px; height: 10px;
+    background: var(--sakura);
+    border-radius: 50%;
+    display: inline-block;
+  }
 
-  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links { display:flex; gap:2.2rem; list-style:none; }
 
   .nav-links a {
     text-decoration: none;
     color: var(--muted);
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+    cursor: pointer;
     transition: color 0.3s;
     position: relative;
-    cursor: pointer;
   }
 
   .nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: -4px; left: 0;
-    width: 0; height: 1px;
-    background: var(--red);
+    content:'';
+    position:absolute;
+    bottom:-4px; left:0;
+    width:0; height:2px;
+    background: var(--sakura);
+    border-radius: 2px;
     transition: width 0.3s;
   }
 
-  .nav-links a:hover { color: var(--ink); }
-  .nav-links a:hover::after { width: 100%; }
+  .nav-links a:hover { color: var(--violet); }
+  .nav-links a:hover::after { width:100%; }
 
   /* ── PAGES ── */
-  .page { display: none; min-height: 100vh; padding-top: 72px; animation: fadeIn 0.5s ease; }
-  .page.active { display: block; }
+  .page { display:none; min-height:100vh; padding-top:70px; animation: fadeIn 0.5s ease; }
+  .page.active { display:block; }
+  #home { display:none; padding-top:70px; }
+  #home.active { display:block; }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from { opacity:0; transform:translateY(12px); }
+    to   { opacity:1; transform:translateY(0); }
   }
 
-  #home { display: none; padding-top: 72px; }
-  #home.active { display: block; }
-
-  /* ════════════════════
+  /* ══════════════════════════════
      HERO
-  ════════════════════ */
-  .home-hero {
-    min-height: calc(100vh - 72px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  ══════════════════════════════ */
+  .hero {
+    min-height: calc(100vh - 70px);
     position: relative;
     overflow: hidden;
-    padding: 4rem 3rem;
-  }
-
-  .deco-layer {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-  }
-
-  .torii-svg {
-    position: absolute;
-    right: 6%;
-    bottom: 0;
-    height: 80%;
-    opacity: 0.08;
-  }
-
-  .pagoda-svg {
-    position: absolute;
-    left: 2%;
-    bottom: 0;
-    height: 50%;
-    opacity: 0.07;
-  }
-
-  .fuji-svg {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    opacity: 0.05;
-  }
-
-  .wave-deco {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 5px;
-    background: repeating-linear-gradient(90deg, var(--red) 0, var(--red) 18px, transparent 18px, transparent 28px);
-    opacity: 0.25;
-  }
-
-  .vert-text {
-    position: absolute;
-    right: 2rem;
-    top: 50%;
-    transform: translateY(-50%);
-    writing-mode: vertical-rl;
-    font-family: 'Shippori Mincho', serif;
-    font-size: 0.62rem;
-    letter-spacing: 0.5em;
-    color: rgba(0,0,0,0.1);
-  }
-
-  .circle-deco {
-    position: absolute;
-    border-radius: 50%;
-    border: 1px solid rgba(192,57,43,0.12);
-  }
-
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    max-width: 680px;
-    margin-left: 8%;
-  }
-
-  .hero-eyebrow {
-    font-size: 0.72rem;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: var(--red);
-    margin-bottom: 1.8rem;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    background: linear-gradient(135deg, var(--sakura-ll) 0%, var(--white) 40%, var(--violet-ll) 100%);
   }
 
-  .hero-eyebrow::before {
-    content: '';
-    display: block;
-    width: 28px; height: 1px;
-    background: var(--red);
+  /* Big fluid blob background */
+  .hero-blob {
+    position: absolute;
+    top: -10%; right: -5%;
+    width: 65%;
+    height: 120%;
+    background: linear-gradient(160deg, var(--sakura) 0%, var(--violet-l) 60%, var(--violet) 100%);
+    border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%;
+    animation: blobmorph 8s ease-in-out infinite;
+    opacity: 0.92;
+  }
+
+  @keyframes blobmorph {
+    0%,100% { border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%; }
+    25%      { border-radius: 50% 50% 60% 40% / 40% 50% 60% 50%; }
+    50%      { border-radius: 40% 60% 50% 50% / 60% 40% 50% 60%; }
+    75%      { border-radius: 55% 45% 40% 60% / 45% 55% 50% 55%; }
+  }
+
+  /* Fuji illustration inside blob */
+  .hero-illustration {
+    position: absolute;
+    right: 0; bottom: 0;
+    width: 60%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  /* Sakura branch top right */
+  .sakura-branch-top {
+    position: absolute;
+    top: -2%; right: 5%;
+    width: 340px;
+    pointer-events: none;
+    z-index: 5;
+    animation: sway 6s ease-in-out infinite;
+    transform-origin: top right;
+  }
+
+  @keyframes sway {
+    0%,100% { transform: rotate(0deg); }
+    50%      { transform: rotate(3deg); }
+  }
+
+  /* Sakura branch bottom left */
+  .sakura-branch-bl {
+    position: absolute;
+    bottom: -3%; left: -2%;
+    width: 220px;
+    pointer-events: none;
+    z-index: 5;
+    transform: scaleX(-1) rotate(-20deg);
+    animation: sway 7s ease-in-out infinite reverse;
+    transform-origin: bottom left;
+  }
+
+  /* Hero text */
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    padding: 3rem 3rem 3rem 8%;
+    max-width: 55%;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: white;
+    border: 1.5px solid var(--sakura);
+    border-radius: 999px;
+    padding: 0.4rem 1.2rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--violet);
+    margin-bottom: 1.8rem;
+    box-shadow: 0 4px 20px rgba(242,167,195,0.25);
+  }
+
+  .hero-badge::before {
+    content: '🌸';
+    font-size: 0.9rem;
   }
 
   .hero-name {
     font-family: 'Shippori Mincho', serif;
-    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    font-size: clamp(3rem, 6.5vw, 6rem);
     font-weight: 800;
-    line-height: 1.0;
-    letter-spacing: -0.03em;
-    margin-bottom: 1.8rem;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
   }
 
-  .hero-name em { font-style: normal; color: var(--red); }
+  .hero-name em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--sakura), var(--violet));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 
   .hero-sub {
-    font-size: 1.05rem;
-    color: var(--muted);
+    font-size: 1rem;
     line-height: 1.9;
-    max-width: 480px;
+    color: var(--muted);
     font-weight: 300;
+    max-width: 400px;
     margin-bottom: 2.5rem;
   }
 
-  .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .hero-cta { display:flex; gap:1rem; flex-wrap:wrap; }
 
   .btn {
     display: inline-block;
-    padding: 0.85rem 2.2rem;
+    padding: 0.9rem 2.2rem;
     font-family: 'Zen Kaku Gothic New', sans-serif;
-    font-size: 0.78rem;
-    letter-spacing: 0.15em;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
-    transition: all 0.3s;
     border: none;
+    border-radius: 999px;
+    transition: all 0.3s;
+    font-weight: 700;
   }
 
-  .btn-primary { background: var(--ink); color: var(--paper); }
-  .btn-primary:hover { background: var(--red); }
-  .btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
-  .btn-outline:hover { background: var(--ink); color: var(--paper); }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--sakura), var(--violet));
+    color: white;
+    box-shadow: 0 8px 30px rgba(107,63,160,0.35);
+  }
 
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(107,63,160,0.45);
+  }
+
+  .btn-outline {
+    background: white;
+    color: var(--violet);
+    border: 2px solid var(--sakura);
+  }
+
+  .btn-outline:hover {
+    background: var(--sakura-l);
+    transform: translateY(-2px);
+  }
+
+  /* Scroll arrow */
   .scroll-arrow {
     position: absolute;
-    bottom: 2.5rem;
-    left: 50%;
+    bottom: 2rem; left: 50%;
     transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
     color: var(--muted);
-    font-size: 0.65rem;
-    letter-spacing: 0.25em;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    z-index: 2;
     cursor: pointer;
+    z-index: 10;
     animation: bobble 2s ease-in-out infinite;
   }
 
   @keyframes bobble {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(8px); }
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50%      { transform: translateX(-50%) translateY(7px); }
   }
 
-  /* ════════════════════
-     BANDS
-  ════════════════════ */
-  .home-band {
+  /* Falling petals */
+  .petal {
+    position: fixed;
+    pointer-events: none;
+    z-index: 200;
+    animation: petalfall linear infinite;
+  }
+
+  @keyframes petalfall {
+    0%   { opacity:0; transform: translateY(-20px) rotate(0deg) translateX(0); }
+    10%  { opacity:0.8; }
+    90%  { opacity:0.5; }
+    100% { opacity:0; transform: translateY(105vh) rotate(540deg) translateX(40px); }
+  }
+
+  /* ══════════════════════════════
+     BANDS HOME
+  ══════════════════════════════ */
+
+  /* Band intro dark violet */
+  .band {
     padding: 6rem 3rem;
     position: relative;
     overflow: hidden;
   }
 
-  .home-band-inner { max-width: 1100px; margin: 0 auto; }
+  .band-inner { max-width: 1100px; margin: 0 auto; }
 
-  /* Band 1 — dark */
-  .band-intro { background: var(--ink); color: var(--paper); }
+  .band-violet {
+    background: linear-gradient(135deg, var(--violet) 0%, #4a2875 100%);
+    color: white;
+  }
 
+  .band-white { background: var(--white); }
+  .band-soft  { background: var(--soft); }
+  .band-sakura { background: linear-gradient(135deg, var(--sakura-ll), var(--violet-ll)); }
+
+  /* Fluid wave divider */
+  .wave-top {
+    position: absolute;
+    top: -1px; left: 0; right: 0;
+    line-height: 0;
+  }
+
+  .wave-bottom {
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    line-height: 0;
+  }
+
+  /* Band intro grid */
   .band-intro-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 3rem;
-    align-items: start;
-  }
-
-  .band-intro-quote {
-    grid-column: 1 / 3;
-    font-family: 'Shippori Mincho', serif;
-    font-size: clamp(1.4rem, 2.5vw, 2.1rem);
-    font-weight: 600;
-    line-height: 1.5;
-    color: var(--paper);
-  }
-
-  .band-intro-quote em { font-style: normal; color: var(--sakura); }
-
-  .band-intro-aside { display: flex; flex-direction: column; gap: 2rem; }
-
-  .band-stat { border-left: 2px solid var(--red); padding-left: 1.2rem; }
-
-  .band-stat-num {
-    font-family: 'Shippori Mincho', serif;
-    font-size: 2.8rem;
-    font-weight: 800;
-    line-height: 1;
-    color: var(--paper);
-  }
-
-  .band-stat-num span { color: var(--red); font-size: 1.5rem; }
-
-  .band-stat-label {
-    font-size: 0.68rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.35);
-    margin-top: 0.3rem;
-  }
-
-  /* Band 2 — skills */
-  .band-skills { background: var(--white); }
-
-  .band-label {
-    font-size: 0.68rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--red);
-    margin-bottom: 2.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .band-label::after { content: ''; flex: 1; height: 1px; background: var(--light); }
-
-  .skills-pills { display: flex; flex-wrap: wrap; gap: 0.8rem; }
-
-  .pill {
-    padding: 0.55rem 1.3rem;
-    border: 1px solid var(--light);
-    font-size: 0.83rem;
-    color: var(--muted);
-    transition: all 0.25s;
-    cursor: default;
-  }
-
-  .pill:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-  .pill.accent { background: var(--red); color: var(--paper); border-color: var(--red); }
-
-  /* Band 3 — featured */
-  .band-featured { background: var(--paper); }
-
-  .featured-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.5fr 1fr;
     gap: 4rem;
     align-items: center;
   }
 
-  .featured-visual {
-    aspect-ratio: 4/3;
-    background: var(--light);
-    position: relative;
+  .band-quote {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+    font-weight: 600;
+    line-height: 1.55;
+    color: white;
+  }
+
+  .band-quote em { font-style:normal; color: var(--sakura); }
+
+  .band-stats { display:flex; flex-direction:column; gap:2rem; }
+
+  .bstat {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 16px;
+    padding: 1.4rem 1.8rem;
+    backdrop-filter: blur(4px);
+  }
+
+  .bstat-num {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: var(--sakura);
+    line-height: 1;
+  }
+
+  .bstat-num span { font-size: 1.4rem; }
+
+  .bstat-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-top: 0.3rem;
+  }
+
+  /* Band skills pills */
+  .band-section-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--sakura);
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-weight: 700;
+  }
+
+  .band-section-label::after { content:''; flex:1; height:1px; background: rgba(242,167,195,0.3); }
+
+  .band-section-label.dark { color: var(--violet); }
+  .band-section-label.dark::after { background: rgba(107,63,160,0.2); }
+
+  .pills { display:flex; flex-wrap:wrap; gap:0.7rem; }
+
+  .pill {
+    padding: 0.55rem 1.3rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    cursor: default;
+    transition: all 0.25s;
+    font-weight: 400;
+  }
+
+  .pill-outline {
+    border: 1.5px solid rgba(107,63,160,0.25);
+    color: var(--violet);
+    background: white;
+  }
+
+  .pill-outline:hover {
+    background: linear-gradient(135deg, var(--sakura), var(--violet));
+    color: white;
+    border-color: transparent;
+    transform: translateY(-2px);
+  }
+
+  .pill-filled {
+    background: linear-gradient(135deg, var(--sakura), var(--violet-l));
+    color: white;
+    border: none;
+  }
+
+  /* Band featured */
+  .featured-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .featured-card {
+    background: white;
+    border-radius: 24px;
     overflow: hidden;
+    box-shadow: 0 20px 60px rgba(107,63,160,0.12);
+    position: relative;
+  }
+
+  .featured-card-img {
+    height: 220px;
+    background: linear-gradient(135deg, var(--sakura-l), var(--violet-ll));
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-
-  .featured-visual-inner {
     font-family: 'Shippori Mincho', serif;
-    font-size: 8rem;
-    color: rgba(0,0,0,0.06);
-    user-select: none;
+    font-size: 7rem;
+    color: rgba(107,63,160,0.15);
+    position: relative;
+    overflow: hidden;
   }
 
-  .featured-frame {
+  .featured-card-img::after {
+    content: '';
     position: absolute;
-    top: 10px; left: 10px;
-    right: -10px; bottom: -10px;
-    border: 1px solid rgba(0,0,0,0.1);
-    z-index: -1;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 50%, rgba(255,255,255,0.5));
   }
 
-  .featured-eyebrow { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--red); margin-bottom: 1rem; }
+  .featured-card-body { padding: 2rem; }
+
+  .featured-tag {
+    display: inline-block;
+    background: var(--sakura-l);
+    color: var(--violet);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.9rem;
+    border-radius: 999px;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
 
   .featured-title {
     font-family: 'Shippori Mincho', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.7rem;
+  }
+
+  .featured-desc { font-size: 0.85rem; line-height: 1.8; color: var(--muted); margin-bottom: 1.5rem; }
+
+  .tech-chips { display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:1.5rem; }
+
+  .tech-chip {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--violet-ll);
+    color: var(--violet);
+    padding: 0.2rem 0.7rem;
+    border-radius: 999px;
+    font-weight: 700;
+  }
+
+  .featured-text h3 {
+    font-family: 'Shippori Mincho', serif;
     font-size: 2rem;
     font-weight: 600;
+    color: var(--ink);
     margin-bottom: 1rem;
     line-height: 1.3;
   }
 
-  .featured-desc { font-size: 0.9rem; line-height: 1.9; color: var(--muted); margin-bottom: 2rem; }
+  .featured-text p { font-size: 0.9rem; line-height: 1.9; color: var(--muted); margin-bottom: 2rem; }
 
-  .feat-tag { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid var(--light); padding: 0.2rem 0.6rem; color: var(--muted); display: inline-block; margin: 0.2rem; }
+  /* Band CTA sakura */
+  .cta-center { text-align: center; }
 
-  /* Band 4 — CTA sakura */
-  .band-cta { background: var(--sakura-pale); text-align: center; }
-
-  .band-cta-kanji {
+  .cta-kanji {
     font-family: 'Shippori Mincho', serif;
     font-size: 5rem;
-    color: rgba(192,57,43,0.1);
+    background: linear-gradient(135deg, var(--sakura), var(--violet));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    opacity: 0.3;
     line-height: 1;
     margin-bottom: 0.5rem;
   }
 
-  .band-cta-title { font-family: 'Shippori Mincho', serif; font-size: 2.2rem; font-weight: 600; margin-bottom: 1rem; }
-  .band-cta-sub { font-size: 0.93rem; color: var(--muted); margin-bottom: 2.5rem; line-height: 1.8; }
-
-  .branch-deco { width: 200px; margin: 0 auto 2rem; opacity: 0.4; }
-
-  /* petal animation */
-  .petal {
-    position: fixed;
-    border-radius: 50% 0 50% 0;
-    animation: fall linear infinite;
-    pointer-events: none;
-    z-index: 1;
+  .cta-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 1rem;
   }
 
-  @keyframes fall {
-    0%   { transform: translateY(-40px) rotate(0deg) translateX(0); opacity: 0; }
-    10%  { opacity: 0.75; }
-    90%  { opacity: 0.5; }
-    100% { transform: translateY(110vh) rotate(720deg) translateX(50px); opacity: 0; }
+  .cta-sub { font-size: 0.95rem; color: var(--muted); margin-bottom: 2.5rem; line-height: 1.8; }
+
+  /* ══════════════════════════════
+     INNER PAGES
+  ══════════════════════════════ */
+
+  /* Page header with fluid blob */
+  .page-header {
+    position: relative;
+    padding: 4rem 3rem 3rem;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--sakura-ll), var(--violet-ll));
   }
 
-  /* ════════════════════
-     INNER PAGES COMMON
-  ════════════════════ */
-  .section-wrap { max-width: 1100px; margin: 0 auto; padding: 5rem 3rem; }
+  .page-header-blob {
+    position: absolute;
+    top: -50%; right: -10%;
+    width: 50%;
+    height: 200%;
+    background: linear-gradient(160deg, var(--sakura) 0%, var(--violet-l) 100%);
+    border-radius: 50% 50% 40% 60% / 50% 40% 60% 50%;
+    opacity: 0.15;
+  }
 
-  .section-header { margin-bottom: 4rem; display: flex; align-items: flex-end; gap: 2rem; }
+  .page-header-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-end;
+    gap: 2rem;
+  }
 
-  .section-num {
+  .page-num {
     font-family: 'Shippori Mincho', serif;
     font-size: 5rem;
     font-weight: 800;
-    color: rgba(0,0,0,0.05);
+    color: rgba(107,63,160,0.08);
     line-height: 1;
     user-select: none;
   }
 
-  .section-sub { font-size: 0.68rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--red); margin-bottom: 0.3rem; }
+  .page-title-group {}
 
-  .section-title { font-family: 'Shippori Mincho', serif; font-size: 2.4rem; font-weight: 600; letter-spacing: -0.02em; }
+  .page-eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--sakura);
+    margin-bottom: 0.3rem;
+    font-weight: 700;
+  }
+
+  .page-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 2.4rem;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+
+  .page-content { max-width: 1100px; margin: 0 auto; padding: 4rem 3rem; }
 
   /* ── À PROPOS ── */
-  .about-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; align-items: start; }
+  .about-grid { display:grid; grid-template-columns:1fr 1.5fr; gap:5rem; align-items:start; }
 
-  .portrait-box { width: 100%; aspect-ratio: 3/4; background: var(--light); position: relative; overflow: hidden; }
+  .portrait-wrap { position: relative; }
 
-  .portrait-box::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg,transparent,transparent 4px,rgba(0,0,0,0.03) 4px,rgba(0,0,0,0.03) 5px); }
+  .portrait-box {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: linear-gradient(135deg, var(--sakura-l), var(--violet-ll));
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(107,63,160,0.15);
+  }
 
-  .portrait-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Shippori Mincho', serif; }
+  .portrait-deco {
+    position: absolute;
+    top: -20px; right: -20px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--sakura), var(--violet-l));
+    opacity: 0.3;
+    z-index: -1;
+  }
 
-  .portrait-kanji { font-size: 6rem; color: rgba(0,0,0,0.1); line-height: 1; }
+  .portrait-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Shippori Mincho', serif;
+  }
+
+  .portrait-kanji { font-size: 7rem; color: rgba(107,63,160,0.12); line-height: 1; }
   .portrait-hint { font-size: 0.62rem; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; margin-top: 1rem; }
-  .portrait-frame { position: absolute; top: 12px; left: 12px; right: -12px; bottom: -12px; border: 1px solid rgba(0,0,0,0.12); z-index: -1; }
 
-  .about-intro { font-family: 'Shippori Mincho', serif; font-size: 1.45rem; font-weight: 600; line-height: 1.55; margin-bottom: 1.5rem; }
-  .about-body { font-size: 0.93rem; line-height: 2; color: var(--muted); margin-bottom: 2rem; }
+  .about-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--sakura-l);
+    color: var(--violet);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+  }
 
-  .about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; border-top: 1px solid var(--light); padding-top: 2rem; }
+  .about-intro {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.45rem;
+    font-weight: 600;
+    line-height: 1.55;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+  }
 
-  .stat-num { font-family: 'Shippori Mincho', serif; font-size: 2.4rem; font-weight: 800; line-height: 1; margin-bottom: 0.3rem; }
-  .stat-num span { color: var(--red); font-size: 1.4rem; }
-  .stat-label { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .about-body { font-size: 0.93rem; line-height: 2; color: var(--muted); margin-bottom: 2.5rem; }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .astat {
+    background: white;
+    border-radius: 16px;
+    padding: 1.2rem;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(107,63,160,0.08);
+    border: 1px solid rgba(242,167,195,0.2);
+  }
+
+  .astat-num {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--sakura), var(--violet));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .astat-label { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 
   /* ── PROJETS ── */
-  .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; background: var(--light); }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
 
-  .project-card { background: var(--white); padding: 2.5rem; position: relative; overflow: hidden; cursor: pointer; transition: background 0.3s; }
+  .project-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(107,63,160,0.08);
+    border: 1px solid rgba(242,167,195,0.2);
+    transition: all 0.3s;
+    cursor: pointer;
+  }
 
-  .project-card:hover { background: var(--ink); }
-  .project-card:hover .project-title,
-  .project-card:hover .project-desc,
-  .project-card:hover .project-tech span { color: var(--paper); }
-  .project-card:hover .project-tech span { border-color: rgba(255,255,255,0.15); }
+  .project-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(107,63,160,0.18);
+  }
 
-  .project-num { font-family: 'Shippori Mincho', serif; font-size: 4rem; font-weight: 800; color: rgba(0,0,0,0.04); position: absolute; top: 1rem; right: 1.5rem; line-height: 1; transition: color 0.3s; }
-  .project-card:hover .project-num { color: rgba(255,255,255,0.04); }
+  .project-card-top {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Shippori Mincho', serif;
+    font-size: 3rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
 
-  .project-icon { width: 38px; height: 38px; background: var(--red); margin-bottom: 1.8rem; display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: transform 0.3s; }
-  .project-card:hover .project-icon { transform: rotate(90deg); }
+  .project-card-top::after {
+    content: '';
+    position: absolute;
+    bottom: -20px; left: -10%;
+    width: 120%;
+    height: 40px;
+    background: white;
+    border-radius: 50%;
+  }
 
-  .project-title { font-family: 'Shippori Mincho', serif; font-size: 1.15rem; font-weight: 600; margin-bottom: 0.7rem; transition: color 0.3s; }
-  .project-desc { font-size: 0.83rem; line-height: 1.8; color: var(--muted); margin-bottom: 1.4rem; transition: color 0.3s; }
+  .pc-color-1 { background: linear-gradient(135deg, #f2a7c3, #9b6fcf); }
+  .pc-color-2 { background: linear-gradient(135deg, #9b6fcf, #4a2875); }
+  .pc-color-3 { background: linear-gradient(135deg, #f2a7c3, #e8b86d); }
+  .pc-color-4 { background: linear-gradient(135deg, #6b3fa0, #f2a7c3); }
+  .pc-color-5 { background: linear-gradient(135deg, #4a2875, #9b6fcf); }
+  .pc-color-6 { background: linear-gradient(135deg, #e8b86d, #f2a7c3); }
 
-  .project-tech { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-  .project-tech span { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid var(--light); padding: 0.2rem 0.55rem; color: var(--muted); transition: all 0.3s; }
+  .project-card-body { padding: 1.8rem; }
+
+  .project-num-tag {
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sakura);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .project-title { font-family:'Shippori Mincho',serif; font-size:1.1rem; font-weight:600; color:var(--ink); margin-bottom:0.6rem; }
+  .project-desc { font-size:0.82rem; line-height:1.75; color:var(--muted); margin-bottom:1.2rem; }
+  .project-chips { display:flex; flex-wrap:wrap; gap:0.4rem; }
+  .pchip { font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; background:var(--violet-ll); color:var(--violet); padding:0.2rem 0.65rem; border-radius:999px; font-weight:700; }
 
   /* ── COMPÉTENCES ── */
-  .skills-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 5rem; }
+  .skills-layout { display:grid; grid-template-columns:1fr 2fr; gap:4rem; }
 
-  .skills-cat-label { font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--red); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--light); }
-  .skills-category { margin-bottom: 2.5rem; }
+  .skill-cat { margin-bottom:2.5rem; }
 
-  .skill-tag { display: inline-block; padding: 0.32rem 0.75rem; background: var(--light); font-size: 0.78rem; margin: 0.22rem; cursor: default; transition: all 0.2s; }
-  .skill-tag:hover { background: var(--ink); color: var(--paper); }
+  .skill-cat-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--violet);
+    margin-bottom: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
 
-  .skill-bar-item { margin-bottom: 2rem; }
-  .skill-bar-header { display: flex; justify-content: space-between; margin-bottom: 0.6rem; }
-  .skill-bar-name { font-family: 'Shippori Mincho', serif; font-size: 1rem; font-weight: 600; }
-  .skill-bar-pct { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.1em; }
-  .skill-bar-track { height: 2px; background: var(--light); position: relative; overflow: hidden; }
+  .skill-cat-label::after { content:''; flex:1; height:1px; background: rgba(107,63,160,0.15); }
 
-  .skill-bar-fill { position: absolute; top: 0; left: 0; height: 100%; background: var(--ink); transform: scaleX(0); transform-origin: left; transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1); }
-  .skill-bar-fill.red { background: var(--red); }
+  .skill-tags { display:flex; flex-wrap:wrap; gap:0.5rem; }
+
+  .stag {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    background: white;
+    border: 1.5px solid rgba(242,167,195,0.4);
+    color: var(--muted);
+    cursor: default;
+    transition: all 0.2s;
+  }
+
+  .stag:hover {
+    background: linear-gradient(135deg, var(--sakura), var(--violet-l));
+    color: white;
+    border-color: transparent;
+    transform: translateY(-2px);
+  }
+
+  .skill-bar-item { margin-bottom:2rem; }
+  .skill-bar-header { display:flex; justify-content:space-between; margin-bottom:0.7rem; }
+
+  .skill-bar-name { font-family:'Shippori Mincho',serif; font-size:1rem; font-weight:600; color:var(--ink); }
+  .skill-bar-pct { font-size:0.72rem; color:var(--muted); }
+
+  .skill-bar-track { height:6px; background:rgba(107,63,160,0.08); border-radius:999px; overflow:hidden; }
+
+  .skill-bar-fill {
+    height:100%;
+    border-radius:999px;
+    background: linear-gradient(90deg, var(--sakura), var(--violet));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1.2s cubic-bezier(0.16,1,0.3,1);
+  }
+
   .skill-bar-fill.animated { transform: scaleX(1); }
 
   /* ── CONTACT ── */
-  .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
+  .contact-layout { display:grid; grid-template-columns:1fr 1fr; gap:6rem; align-items:start; }
 
-  .contact-tagline { font-family: 'Shippori Mincho', serif; font-size: 2rem; font-weight: 600; line-height: 1.4; margin-bottom: 2rem; }
-  .contact-tagline em { font-style: normal; color: var(--red); }
+  .contact-tagline { font-family:'Shippori Mincho',serif; font-size:2rem; font-weight:600; line-height:1.4; margin-bottom:1.5rem; color:var(--ink); }
+  .contact-tagline em { font-style:normal; background:linear-gradient(135deg,var(--sakura),var(--violet)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 
-  .contact-body { font-size: 0.88rem; line-height: 2; color: var(--muted); margin-bottom: 3rem; }
+  .contact-body { font-size:0.88rem; line-height:2; color:var(--muted); margin-bottom:2.5rem; }
 
-  .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+  .contact-links { display:flex; flex-direction:column; gap:0.8rem; }
 
-  .contact-link { display: flex; align-items: center; gap: 1rem; text-decoration: none; color: var(--ink); font-size: 0.83rem; letter-spacing: 0.04em; transition: color 0.3s; padding-bottom: 1rem; border-bottom: 1px solid var(--light); }
-  .contact-link:hover { color: var(--red); }
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: var(--ink);
+    font-size: 0.83rem;
+    transition: all 0.3s;
+    padding: 1rem 1.2rem;
+    border-radius: 14px;
+    background: white;
+    border: 1px solid rgba(242,167,195,0.2);
+    box-shadow: 0 2px 12px rgba(107,63,160,0.06);
+  }
 
-  .contact-link-icon { width: 34px; height: 34px; background: var(--light); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+  .contact-link:hover { transform:translateX(6px); border-color:var(--sakura); color:var(--violet); }
 
-  .form-group { margin-bottom: 1.5rem; }
-  .form-label { display: block; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+  .contact-link-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--sakura-l), var(--violet-ll));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+    color: var(--violet);
+    font-weight: 700;
+  }
 
-  .form-input, .form-textarea { width: 100%; padding: 0.75rem 0; background: transparent; border: none; border-bottom: 1px solid var(--light); font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 0.93rem; color: var(--ink); outline: none; transition: border-color 0.3s; resize: none; }
-  .form-input:focus, .form-textarea:focus { border-bottom-color: var(--ink); }
-  .form-textarea { min-height: 110px; }
+  .form-card {
+    background: white;
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 40px rgba(107,63,160,0.1);
+    border: 1px solid rgba(242,167,195,0.2);
+  }
+
+  .form-group { margin-bottom:1.5rem; }
+  .form-label { display:block; font-size:0.68rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); margin-bottom:0.5rem; font-weight:700; }
+
+  .form-input, .form-textarea {
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    background: var(--soft);
+    border: 1.5px solid rgba(242,167,195,0.3);
+    border-radius: 12px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 0.93rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.3s;
+    resize: none;
+  }
+
+  .form-input:focus, .form-textarea:focus { border-color: var(--sakura); }
+  .form-textarea { min-height:110px; }
 
   /* ── FOOTER ── */
-  footer { border-top: 1px solid var(--light); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.73rem; color: var(--muted); letter-spacing: 0.08em; }
-  .footer-kanji { font-family: 'Shippori Mincho', serif; font-size: 1.4rem; color: rgba(0,0,0,0.08); }
+  footer {
+    background: linear-gradient(135deg, var(--violet) 0%, #2a1a3e 100%);
+    padding: 2.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.73rem;
+    letter-spacing: 0.08em;
+  }
+
+  .footer-logo {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.2rem;
+    color: white;
+    font-weight: 800;
+  }
+
+  .footer-kanji { font-family:'Shippori Mincho',serif; font-size:1.4rem; color:rgba(242,167,195,0.3); }
 
   /* ── MOBILE ── */
-  @media (max-width: 768px) {
-    nav { padding: 1rem 1.5rem; }
-    .nav-links { gap: 1rem; }
-    .nav-links a { font-size: 0.68rem; }
-    .section-wrap, .home-band { padding: 3.5rem 1.5rem; }
-    .home-hero { padding: 3rem 1.5rem; }
-    .hero-content { margin-left: 0; }
-    .band-intro-grid, .featured-grid, .about-grid, .contact-layout { grid-template-columns: 1fr; }
-    .band-intro-quote { grid-column: 1; }
-    .projects-grid, .skills-layout { grid-template-columns: 1fr; gap: 2.5rem; }
-    .section-num { font-size: 3rem; }
-    .vert-text { display: none; }
+  @media (max-width:768px) {
+    nav { padding:1rem 1.5rem; }
+    .nav-links { gap:1rem; }
+    .nav-links a { font-size:0.68rem; }
+    .hero-content { max-width:100%; padding:3rem 1.5rem; }
+    .hero-blob { width:100%; height:50%; top:auto; bottom:0; right:0; border-radius:60% 60% 0 0; }
+    .hero-illustration { display:none; }
+    .sakura-branch-top { width:180px; }
+    .band { padding:4rem 1.5rem; }
+    .band-intro-grid, .featured-grid, .about-grid, .contact-layout { grid-template-columns:1fr; gap:2.5rem; }
+    .projects-grid { grid-template-columns:1fr; }
+    .skills-layout { grid-template-columns:1fr; gap:2.5rem; }
+    .page-content { padding:3rem 1.5rem; }
+    .page-header { padding:3rem 1.5rem 2rem; }
+    .page-num { font-size:3rem; }
+    .about-stats { grid-template-columns:repeat(3,1fr); }
   }
 </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
   <div class="nav-logo" onclick="showPage('home')">
-    <span>●</span> M.Holay
+    <span class="nav-logo-dot"></span> M.Holay
   </div>
   <ul class="nav-links">
     <li><a onclick="showPage('about')">À propos</a></li>
@@ -567,160 +949,195 @@
 <section id="home" class="page active">
 
   <!-- HERO -->
-  <div class="home-hero">
-    <div class="deco-layer">
+  <div class="hero">
 
-      <!-- Torii Gate SVG -->
-      <svg class="torii-svg" viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg" fill="var(--ink)">
-        <path d="M10 62 Q100 8 190 62" fill="none" stroke="var(--ink)" stroke-width="10" stroke-linecap="round"/>
-        <rect x="5" y="58" width="190" height="14" rx="3"/>
-        <rect x="18" y="88" width="164" height="9" rx="2"/>
-        <rect x="28" y="97" width="13" height="223" rx="4"/>
-        <rect x="159" y="97" width="13" height="223" rx="4"/>
-        <rect x="50" y="140" width="8" height="40" rx="2"/>
-        <rect x="142" y="140" width="8" height="40" rx="2"/>
-      </svg>
+    <!-- Fluid blob -->
+    <div class="hero-blob"></div>
 
-      <!-- Pagoda SVG -->
-      <svg class="pagoda-svg" viewBox="0 0 130 300" xmlns="http://www.w3.org/2000/svg" fill="var(--ink)">
-        <rect x="60" y="0" width="10" height="35"/>
-        <circle cx="65" cy="5" r="5"/>
-        <polygon points="22,55 108,55 118,72 12,72"/>
-        <rect x="32" y="72" width="66" height="22"/>
-        <polygon points="14,94 116,94 126,112 4,112"/>
-        <rect x="24" y="112" width="82" height="26"/>
-        <polygon points="8,138 122,138 130,156 0,156"/>
-        <rect x="16" y="156" width="98" height="30"/>
-        <polygon points="4,186 126,186 132,205 -2,205"/>
-        <rect x="10" y="205" width="110" height="95"/>
-        <rect x="25" y="220" width="16" height="50"/>
-        <rect x="57" y="220" width="16" height="50"/>
-        <rect x="89" y="220" width="16" height="50"/>
-      </svg>
+    <!-- Fuji + torii illustration inside blob -->
+    <svg class="hero-illustration" viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
+      <!-- Sky gradient -->
+      <defs>
+        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.0)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0.15)"/>
+        </linearGradient>
+        <linearGradient id="fujiGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="30%" stop-color="#e8d0f8"/>
+          <stop offset="100%" stop-color="#6b3fa0"/>
+        </linearGradient>
+        <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(242,167,195,0.6)"/>
+          <stop offset="100%" stop-color="rgba(107,63,160,0.4)"/>
+        </linearGradient>
+      </defs>
 
-      <!-- Fuji Silhouette -->
-      <svg class="fuji-svg" viewBox="0 0 1440 160" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,160 L380,160 L530,60 L565,28 L600,60 L760,160 L1440,160 Z" fill="var(--ink)"/>
-        <path d="M540,45 L565,28 L590,45 L578,54 L552,54 Z" fill="white" opacity="0.5"/>
-      </svg>
+      <!-- Water -->
+      <ellipse cx="300" cy="460" rx="320" ry="60" fill="url(#waterGrad)"/>
+      <!-- Water reflection lines -->
+      <line x1="80" y1="455" x2="200" y2="455" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+      <line x1="220" y1="465" x2="370" y2="465" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+      <line x1="380" y1="458" x2="510" y2="458" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
 
-      <!-- Decorative circles -->
-      <div class="circle-deco" style="width:420px;height:420px;top:-130px;right:8%;"></div>
-      <div class="circle-deco" style="width:180px;height:180px;bottom:100px;left:22%;"></div>
-      <div class="circle-deco" style="width:80px;height:80px;top:20%;left:40%;"></div>
+      <!-- Fuji mountain -->
+      <path d="M120,420 L300,80 L480,420 Z" fill="url(#fujiGrad)"/>
+      <!-- Snow cap -->
+      <path d="M255,130 L300,80 L345,130 L330,145 L270,145 Z" fill="white" opacity="0.9"/>
+      <!-- Mountain shadow side -->
+      <path d="M300,80 L480,420 L350,420 Z" fill="rgba(107,63,160,0.2)"/>
 
-      <div class="wave-deco"></div>
-      <div class="vert-text">情報技術 ・ 創造性 ・ 誠実さ</div>
-    </div>
+      <!-- Torii gate in water -->
+      <!-- Main horizontal beam -->
+      <path d="M190,360 Q300,340 410,360" fill="none" stroke="#c0392b" stroke-width="10" stroke-linecap="round"/>
+      <rect x="185" y="354" width="230" height="12" rx="4" fill="#c0392b"/>
+      <!-- Second beam -->
+      <rect x="200" y="378" width="200" height="8" rx="3" fill="#c0392b"/>
+      <!-- Pillars -->
+      <rect x="208" y="386" width="16" height="80" rx="4" fill="#c0392b"/>
+      <rect x="376" y="386" width="16" height="80" rx="4" fill="#c0392b"/>
+      <!-- Torii reflection in water -->
+      <path d="M208,466 L224,500 M376,466 L392,500" stroke="rgba(192,57,43,0.2)" stroke-width="8"/>
 
+      <!-- Clouds -->
+      <ellipse cx="120" cy="180" rx="50" ry="20" fill="rgba(255,255,255,0.5)"/>
+      <ellipse cx="150" cy="175" rx="35" ry="18" fill="rgba(255,255,255,0.6)"/>
+      <ellipse cx="470" cy="200" rx="45" ry="18" fill="rgba(255,255,255,0.4)"/>
+      <ellipse cx="495" cy="195" rx="30" ry="16" fill="rgba(255,255,255,0.5)"/>
+    </svg>
+
+    <!-- Sakura branch top right -->
+    <svg class="sakura-branch-top" viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+      <path d="M340,0 Q280,40 200,80 Q140,110 80,160 Q40,190 0,200" fill="none" stroke="#8B4513" stroke-width="5" stroke-linecap="round"/>
+      <path d="M240,55 Q210,20 190,50" fill="none" stroke="#8B4513" stroke-width="3"/>
+      <path d="M180,90 Q150,55 135,80" fill="none" stroke="#8B4513" stroke-width="3"/>
+      <path d="M280,30 Q310,10 295,40" fill="none" stroke="#8B4513" stroke-width="2.5"/>
+      <!-- Flower clusters -->
+      <g transform="translate(190,48)"><circle r="8" fill="#fce4ef"/><circle cx="10" r="7" fill="#f2a7c3"/><circle cx="-8" cy="-6" r="7" fill="#fce4ef"/><circle cx="5" cy="-10" r="6" fill="#f2a7c3"/><circle cx="-3" cy="9" r="6" fill="#fbd5e4"/><circle cx="2" cy="-1" r="3" fill="#e8b86d"/></g>
+      <g transform="translate(135,78)"><circle r="8" fill="#f2a7c3"/><circle cx="9" r="7" fill="#fce4ef"/><circle cx="-7" cy="-7" r="7" fill="#f2a7c3"/><circle cx="4" cy="-11" r="6" fill="#fce4ef"/><circle cx="-2" cy="9" r="6" fill="#fbd5e4"/><circle cx="2" cy="-1" r="3" fill="#e8b86d"/></g>
+      <g transform="translate(295,38)"><circle r="7" fill="#fce4ef"/><circle cx="8" r="6" fill="#f2a7c3"/><circle cx="-6" cy="-6" r="6" fill="#fce4ef"/><circle cx="3" cy="-9" r="5" fill="#f2a7c3"/><circle cx="1" cy="-1" r="2.5" fill="#e8b86d"/></g>
+      <g transform="translate(75,155)"><circle r="7" fill="#fbd5e4"/><circle cx="8" r="6" fill="#f2a7c3"/><circle cx="-6" cy="-5" r="6" fill="#fce4ef"/><circle cx="3" cy="-9" r="5" fill="#f2a7c3"/><circle cx="1" cy="-1" r="2.5" fill="#e8b86d"/></g>
+      <!-- Falling petals -->
+      <ellipse cx="160" cy="130" rx="5" ry="7" fill="#f2a7c3" opacity="0.7" transform="rotate(-30,160,130)"/>
+      <ellipse cx="220" cy="100" rx="4" ry="6" fill="#fce4ef" opacity="0.6" transform="rotate(20,220,100)"/>
+      <ellipse cx="100" cy="170" rx="4" ry="5" fill="#fbd5e4" opacity="0.7" transform="rotate(-10,100,170)"/>
+    </svg>
+
+    <!-- Sakura branch bottom left -->
+    <svg class="sakura-branch-bl" viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,160 Q60,120 120,80 Q170,50 220,0" fill="none" stroke="#8B4513" stroke-width="5" stroke-linecap="round"/>
+      <path d="M80,110 Q50,80 70,60" fill="none" stroke="#8B4513" stroke-width="3"/>
+      <path d="M140,65 Q120,35 140,20" fill="none" stroke="#8B4513" stroke-width="3"/>
+      <g transform="translate(68,62)"><circle r="7" fill="#f2a7c3"/><circle cx="8" r="6" fill="#fce4ef"/><circle cx="-6" cy="-6" r="6" fill="#f2a7c3"/><circle cx="3" cy="-9" r="5" fill="#fce4ef"/><circle cx="1" cy="-1" r="2.5" fill="#e8b86d"/></g>
+      <g transform="translate(138,22)"><circle r="7" fill="#fce4ef"/><circle cx="8" r="6" fill="#f2a7c3"/><circle cx="-6" cy="-5" r="6" fill="#fce4ef"/><circle cx="3" cy="-9" r="5" fill="#f2a7c3"/><circle cx="1" cy="-1" r="2.5" fill="#e8b86d"/></g>
+    </svg>
+
+    <!-- Hero content -->
     <div class="hero-content">
-      <div class="hero-eyebrow">BUT Informatique · 3ème Année</div>
+      <div class="hero-badge">BUT Informatique · 3ème Année</div>
       <h1 class="hero-name">Marius<br><em>Holay</em></h1>
-      <p class="hero-sub">Développeur passionné, curieux et créatif.<br>J'explore le monde du code avec rigueur et imagination — une ligne à la fois.</p>
+      <p class="hero-sub">Développeur passionné, curieux et créatif. J'explore le monde du code avec rigueur et imagination — une ligne à la fois.</p>
       <div class="hero-cta">
         <button class="btn btn-primary" onclick="showPage('projects')">Voir mes projets</button>
         <button class="btn btn-outline" onclick="showPage('contact')">Me contacter</button>
       </div>
     </div>
 
-    <div class="scroll-arrow" onclick="document.getElementById('band-intro').scrollIntoView({behavior:'smooth'})">
+    <div class="scroll-arrow" onclick="document.getElementById('band1').scrollIntoView({behavior:'smooth'})">
       Défiler
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
     </div>
   </div>
 
-  <!-- BAND 1 — Présentation sombre -->
-  <div class="home-band band-intro" id="band-intro">
-    <div class="home-band-inner">
+  <!-- BAND 1 — violet présentation -->
+  <div class="band band-violet" id="band1">
+    <div class="band-inner">
       <div class="band-intro-grid">
-        <div class="band-intro-quote">
-          Étudiant en <em>BUT Informatique</em>, je conçois des solutions numériques alliant technique rigoureuse et sens du détail.
+        <div class="band-quote">
+          Étudiant en <em>BUT Informatique</em>, je conçois des solutions numériques alliant technique rigoureuse et sens du détail esthétique.
         </div>
-        <div class="band-intro-aside">
-          <div class="band-stat">
-            <div class="band-stat-num">3<span>ème</span></div>
-            <div class="band-stat-label">Année de formation</div>
+        <div class="band-stats">
+          <div class="bstat">
+            <div class="bstat-num">3<span>ème</span></div>
+            <div class="bstat-label">Année de formation</div>
           </div>
-          <div class="band-stat">
-            <div class="band-stat-num">6<span>+</span></div>
-            <div class="band-stat-label">Projets réalisés</div>
+          <div class="bstat">
+            <div class="bstat-num">6<span>+</span></div>
+            <div class="bstat-label">Projets réalisés</div>
           </div>
-          <div class="band-stat">
-            <div class="band-stat-num">5<span>+</span></div>
-            <div class="band-stat-label">Langages maîtrisés</div>
+          <div class="bstat">
+            <div class="bstat-num">5<span>+</span></div>
+            <div class="bstat-label">Langages maîtrisés</div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- BAND 2 — Compétences -->
-  <div class="home-band band-skills">
-    <div class="home-band-inner">
-      <div class="band-label">Compétences clés</div>
-      <div class="skills-pills">
-        <span class="pill accent">Python</span>
-        <span class="pill accent">JavaScript</span>
-        <span class="pill">HTML / CSS</span>
-        <span class="pill">SQL</span>
-        <span class="pill">PHP</span>
-        <span class="pill">Java</span>
-        <span class="pill">Git</span>
-        <span class="pill">Linux</span>
-        <span class="pill">Docker</span>
-        <span class="pill">Node.js</span>
-        <span class="pill">Algorithmique</span>
-        <span class="pill">Base de données</span>
+  <!-- BAND 2 — compétences -->
+  <div class="band band-white">
+    <div class="band-inner">
+      <div class="band-section-label dark">Compétences clés</div>
+      <div class="pills">
+        <span class="pill pill-filled">Python</span>
+        <span class="pill pill-filled">JavaScript</span>
+        <span class="pill pill-outline">HTML / CSS</span>
+        <span class="pill pill-outline">SQL</span>
+        <span class="pill pill-outline">PHP</span>
+        <span class="pill pill-outline">Java</span>
+        <span class="pill pill-outline">Git</span>
+        <span class="pill pill-outline">Linux</span>
+        <span class="pill pill-outline">Docker</span>
+        <span class="pill pill-outline">Node.js</span>
+        <span class="pill pill-outline">Algorithmique</span>
+        <span class="pill pill-outline">Base de données</span>
       </div>
     </div>
   </div>
 
-  <!-- BAND 3 — Projet en vedette -->
-  <div class="home-band band-featured">
-    <div class="home-band-inner">
-      <div class="band-label">Projet en vedette</div>
+  <!-- BAND 3 — projet en vedette -->
+  <div class="band band-soft">
+    <div class="band-inner">
+      <div class="band-section-label dark">Projet en vedette</div>
       <div class="featured-grid">
-        <div class="featured-visual">
-          <div class="featured-visual-inner">技</div>
-          <div class="featured-frame"></div>
-        </div>
-        <div>
-          <div class="featured-eyebrow">Projet phare</div>
-          <h3 class="featured-title">Application Web Full-Stack</h3>
-          <p class="featured-desc">Une application complète avec authentification utilisateur, base de données relationnelle et interface responsive. Développée dans le cadre de mes études, elle illustre ma capacité à concevoir et déployer une solution de bout en bout.</p>
-          <div style="margin-bottom:2rem;">
-            <span class="feat-tag">HTML</span>
-            <span class="feat-tag">CSS</span>
-            <span class="feat-tag">JavaScript</span>
-            <span class="feat-tag">MySQL</span>
+        <div class="featured-card">
+          <div class="featured-card-img pc-color-1">技</div>
+          <div class="featured-card-body">
+            <div class="featured-tag">Projet phare</div>
+            <h3 class="featured-title">Application Web Full-Stack</h3>
+            <p class="featured-desc">Application complète avec authentification, base de données et interface responsive.</p>
+            <div class="tech-chips">
+              <span class="tech-chip">HTML</span>
+              <span class="tech-chip">CSS</span>
+              <span class="tech-chip">JavaScript</span>
+              <span class="tech-chip">MySQL</span>
+            </div>
           </div>
-          <button class="btn btn-primary" onclick="showPage('projects')">Tous les projets →</button>
+        </div>
+        <div class="featured-text">
+          <h3>Des solutions pensées de bout en bout</h3>
+          <p>En 3ème année de BUT Informatique à Aulnoye-Aymeries, j'ai développé des projets complets qui illustrent ma capacité à concevoir, coder et déployer des applications robustes.</p>
+          <button class="btn btn-primary" onclick="showPage('projects')">Voir tous les projets →</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- BAND 4 — Sakura CTA -->
-  <div class="home-band band-cta">
-    <div class="home-band-inner">
-      <!-- Sakura branch -->
-      <svg class="branch-deco" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10,62 Q70,22 190,32" fill="none" stroke="#c0392b" stroke-width="2"/>
-        <path d="M60,42 Q82,12 102,32" fill="none" stroke="#c0392b" stroke-width="1.5"/>
-        <path d="M115,36 Q135,6 155,30" fill="none" stroke="#c0392b" stroke-width="1.5"/>
-        <ellipse cx="100" cy="30" rx="7" ry="5" fill="#f4b8c8" transform="rotate(-20,100,30)"/>
-        <ellipse cx="105" cy="25" rx="6" ry="4" fill="#f9d0dc" transform="rotate(30,105,25)"/>
-        <ellipse cx="95" cy="25" rx="5" ry="4" fill="#fce8ef" transform="rotate(-10,95,25)"/>
-        <ellipse cx="153" cy="28" rx="6" ry="4" fill="#f4b8c8" transform="rotate(-15,153,28)"/>
-        <ellipse cx="158" cy="23" rx="5" ry="4" fill="#fce8ef" transform="rotate(25,158,23)"/>
-        <ellipse cx="62" cy="40" rx="5" ry="4" fill="#f4b8c8" transform="rotate(-5,62,40)"/>
-        <circle cx="100" cy="28" r="2" fill="#c0392b" opacity="0.5"/>
-        <circle cx="153" cy="26" r="2" fill="#c0392b" opacity="0.5"/>
+  <!-- BAND 4 — CTA sakura -->
+  <div class="band band-sakura">
+    <div class="band-inner cta-center">
+      <!-- Mini sakura branch deco -->
+      <svg width="180" height="70" viewBox="0 0 180 70" xmlns="http://www.w3.org/2000/svg" style="margin:0 auto 1.5rem;display:block;opacity:0.5;">
+        <path d="M10,55 Q70,20 170,30" fill="none" stroke="#8B4513" stroke-width="2.5"/>
+        <path d="M60,38 Q78,12 95,30" fill="none" stroke="#8B4513" stroke-width="1.5"/>
+        <path d="M115,32 Q132,8 148,28" fill="none" stroke="#8B4513" stroke-width="1.5"/>
+        <g transform="translate(93,28)"><circle r="6" fill="#f2a7c3"/><circle cx="7" r="5" fill="#fce4ef"/><circle cx="-5" cy="-5" r="5" fill="#f2a7c3"/><circle cx="2" cy="-8" r="4" fill="#fce4ef"/><circle cx="1" cy="-1" r="2" fill="#e8b86d"/></g>
+        <g transform="translate(146,26)"><circle r="6" fill="#fce4ef"/><circle cx="7" r="5" fill="#f2a7c3"/><circle cx="-5" cy="-5" r="5" fill="#fce4ef"/><circle cx="2" cy="-8" r="4" fill="#f2a7c3"/><circle cx="1" cy="-1" r="2" fill="#e8b86d"/></g>
+        <g transform="translate(60,36)"><circle r="5" fill="#f2a7c3"/><circle cx="6" r="4" fill="#fce4ef"/><circle cx="-4" cy="-4" r="4" fill="#f2a7c3"/><circle cx="1" cy="-1" r="1.8" fill="#e8b86d"/></g>
       </svg>
-
-      <div class="band-cta-kanji">縁</div>
-      <h3 class="band-cta-title">Travaillons ensemble</h3>
-      <p class="band-cta-sub">Une idée, un projet, une opportunité de stage ?<br>Je suis disponible et à l'écoute.</p>
+      <div class="cta-kanji">縁</div>
+      <h3 class="cta-title">Travaillons ensemble</h3>
+      <p class="cta-sub">Une idée, un projet, une opportunité de stage ?<br>Je suis disponible et à l'écoute.</p>
       <button class="btn btn-primary" onclick="showPage('contact')">Prendre contact</button>
     </div>
   </div>
@@ -729,25 +1146,29 @@
 
 <!-- ══════ À PROPOS ══════ -->
 <section id="about" class="page">
-  <div class="section-wrap">
-    <div class="section-header">
-      <div class="section-num">01</div>
-      <div>
-        <div class="section-sub">自己紹介 — Présentation</div>
-        <h2 class="section-title">À propos de moi</h2>
+  <div class="page-header">
+    <div class="page-header-blob"></div>
+    <div class="page-header-inner">
+      <div class="page-num">01</div>
+      <div class="page-title-group">
+        <div class="page-eyebrow">自己紹介 — Présentation</div>
+        <h2 class="page-title">À propos de moi</h2>
       </div>
     </div>
+  </div>
+  <div class="page-content">
     <div class="about-grid">
-      <div style="position:relative;">
+      <div class="portrait-wrap">
+        <div class="portrait-deco"></div>
         <div class="portrait-box">
           <div class="portrait-placeholder">
             <div class="portrait-kanji">人</div>
             <div class="portrait-hint">Votre photo</div>
           </div>
         </div>
-        <div class="portrait-frame"></div>
       </div>
       <div>
+        <div class="about-tag">🌸 BUT Informatique · 3ème Année</div>
         <p class="about-intro">Étudiant en BUT Informatique, passionné par la création de solutions élégantes à des problèmes complexes.</p>
         <p class="about-body">
           Actuellement en 3ème année de BUT Informatique à Aulnoye-Aymeries, je me spécialise dans le développement web et la conception de systèmes d'information. J'aime apprendre de nouvelles technologies et relever des défis techniques ambitieux.
@@ -755,17 +1176,17 @@
           En dehors du code, je suis attiré par le design, la culture japonaise et la façon dont l'esthétique peut s'allier à la fonctionnalité pour créer des expériences mémorables.
         </p>
         <div class="about-stats">
-          <div>
-            <div class="stat-num">3<span>ème</span></div>
-            <div class="stat-label">Année BUT Info</div>
+          <div class="astat">
+            <div class="astat-num">3ème</div>
+            <div class="astat-label">Année BUT</div>
           </div>
-          <div>
-            <div class="stat-num">6<span>+</span></div>
-            <div class="stat-label">Projets réalisés</div>
+          <div class="astat">
+            <div class="astat-num">6+</div>
+            <div class="astat-label">Projets</div>
           </div>
-          <div>
-            <div class="stat-num">5<span>+</span></div>
-            <div class="stat-label">Langages</div>
+          <div class="astat">
+            <div class="astat-num">5+</div>
+            <div class="astat-label">Langages</div>
           </div>
         </div>
       </div>
@@ -775,56 +1196,71 @@
 
 <!-- ══════ PROJETS ══════ -->
 <section id="projects" class="page">
-  <div class="section-wrap">
-    <div class="section-header">
-      <div class="section-num">02</div>
-      <div>
-        <div class="section-sub">プロジェクト — Réalisations</div>
-        <h2 class="section-title">Mes projets</h2>
+  <div class="page-header">
+    <div class="page-header-blob"></div>
+    <div class="page-header-inner">
+      <div class="page-num">02</div>
+      <div class="page-title-group">
+        <div class="page-eyebrow">プロジェクト — Réalisations</div>
+        <h2 class="page-title">Mes projets</h2>
       </div>
     </div>
+  </div>
+  <div class="page-content">
     <div class="projects-grid">
       <div class="project-card">
-        <div class="project-num">01</div>
-        <div class="project-icon">◆</div>
-        <h3 class="project-title">Application Web</h3>
-        <p class="project-desc">Application full-stack avec authentification utilisateur, base de données et interface responsive.</p>
-        <div class="project-tech"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>MySQL</span></div>
+        <div class="project-card-top pc-color-1">技</div>
+        <div class="project-card-body">
+          <div class="project-num-tag">Projet 01</div>
+          <h3 class="project-title">Application Web</h3>
+          <p class="project-desc">Application full-stack avec authentification utilisateur, base de données et interface responsive.</p>
+          <div class="project-chips"><span class="pchip">HTML</span><span class="pchip">CSS</span><span class="pchip">JS</span><span class="pchip">MySQL</span></div>
+        </div>
       </div>
       <div class="project-card">
-        <div class="project-num">02</div>
-        <div class="project-icon">◆</div>
-        <h3 class="project-title">Jeu en Python</h3>
-        <p class="project-desc">Jeu textuel avec système de niveaux, gestion des scores et interface colorée en terminal.</p>
-        <div class="project-tech"><span>Python</span><span>POO</span><span>Algorithmes</span></div>
+        <div class="project-card-top pc-color-2">力</div>
+        <div class="project-card-body">
+          <div class="project-num-tag">Projet 02</div>
+          <h3 class="project-title">Jeu en Python</h3>
+          <p class="project-desc">Jeu textuel avec système de niveaux, gestion des scores et interface colorée en terminal.</p>
+          <div class="project-chips"><span class="pchip">Python</span><span class="pchip">POO</span><span class="pchip">Algo</span></div>
+        </div>
       </div>
       <div class="project-card">
-        <div class="project-num">03</div>
-        <div class="project-icon">◆</div>
-        <h3 class="project-title">API REST</h3>
-        <p class="project-desc">API REST complète avec endpoints CRUD, documentation et tests unitaires.</p>
-        <div class="project-tech"><span>Node.js</span><span>Express</span><span>JSON</span></div>
+        <div class="project-card-top pc-color-3">道</div>
+        <div class="project-card-body">
+          <div class="project-num-tag">Projet 03</div>
+          <h3 class="project-title">API REST</h3>
+          <p class="project-desc">API REST complète avec endpoints CRUD, documentation et tests unitaires.</p>
+          <div class="project-chips"><span class="pchip">Node.js</span><span class="pchip">Express</span><span class="pchip">JSON</span></div>
+        </div>
       </div>
       <div class="project-card">
-        <div class="project-num">04</div>
-        <div class="project-icon">◆</div>
-        <h3 class="project-title">Base de données</h3>
-        <p class="project-desc">Conception et implémentation d'une base de données relationnelle avec requêtes optimisées.</p>
-        <div class="project-tech"><span>SQL</span><span>PostgreSQL</span><span>Modélisation</span></div>
+        <div class="project-card-top pc-color-4">学</div>
+        <div class="project-card-body">
+          <div class="project-num-tag">Projet 04</div>
+          <h3 class="project-title">Base de données</h3>
+          <p class="project-desc">Conception et implémentation d'une base de données relationnelle avec requêtes optimisées.</p>
+          <div class="project-chips"><span class="pchip">SQL</span><span class="pchip">PostgreSQL</span><span class="pchip">MCD</span></div>
+        </div>
       </div>
       <div class="project-card">
-        <div class="project-num">05</div>
-        <div class="project-icon">◆</div>
-        <h3 class="project-title">Site E-commerce</h3>
-        <p class="project-desc">Interface de boutique en ligne avec panier, filtres de produits et design adaptatif.</p>
-        <div class="project-tech"><span>HTML</span><span>CSS</span><span>JS</span><span>PHP</span></div>
+        <div class="project-card-top pc-color-5">創</div>
+        <div class="project-card-body">
+          <div class="project-num-tag">Projet 05</div>
+          <h3 class="project-title">Site E-commerce</h3>
+          <p class="project-desc">Interface de boutique en ligne avec panier, filtres de produits et design adaptatif.</p>
+          <div class="project-chips"><span class="pchip">HTML</span><span class="pchip">CSS</span><span class="pchip">JS</span><span class="pchip">PHP</span></div>
+        </div>
       </div>
       <div class="project-card">
-        <div class="project-num">06</div>
-        <div class="project-icon">◆</div>
-        <h3 class="project-title">Script d'automatisation</h3>
-        <p class="project-desc">Script Python pour automatiser des tâches, traitement de fichiers et génération de rapports.</p>
-        <div class="project-tech"><span>Python</span><span>Pandas</span><span>Automatisation</span></div>
+        <div class="project-card-top pc-color-6">心</div>
+        <div class="project-card-body">
+          <div class="project-num-tag">Projet 06</div>
+          <h3 class="project-title">Script d'automatisation</h3>
+          <p class="project-desc">Script Python pour automatiser des tâches, traitement de fichiers et génération de rapports.</p>
+          <div class="project-chips"><span class="pchip">Python</span><span class="pchip">Pandas</span><span class="pchip">Auto</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -832,27 +1268,36 @@
 
 <!-- ══════ COMPÉTENCES ══════ -->
 <section id="skills" class="page">
-  <div class="section-wrap">
-    <div class="section-header">
-      <div class="section-num">03</div>
-      <div>
-        <div class="section-sub">スキル — Savoir-faire</div>
-        <h2 class="section-title">Mes compétences</h2>
+  <div class="page-header">
+    <div class="page-header-blob"></div>
+    <div class="page-header-inner">
+      <div class="page-num">03</div>
+      <div class="page-title-group">
+        <div class="page-eyebrow">スキル — Savoir-faire</div>
+        <h2 class="page-title">Mes compétences</h2>
       </div>
     </div>
+  </div>
+  <div class="page-content">
     <div class="skills-layout">
       <div>
-        <div class="skills-category">
-          <div class="skills-cat-label">Langages</div>
-          <span class="skill-tag">Python</span><span class="skill-tag">JavaScript</span><span class="skill-tag">HTML5</span><span class="skill-tag">CSS3</span><span class="skill-tag">SQL</span><span class="skill-tag">PHP</span><span class="skill-tag">Java</span><span class="skill-tag">C</span>
+        <div class="skill-cat">
+          <div class="skill-cat-label">Langages</div>
+          <div class="skill-tags">
+            <span class="stag">Python</span><span class="stag">JavaScript</span><span class="stag">HTML5</span><span class="stag">CSS3</span><span class="stag">SQL</span><span class="stag">PHP</span><span class="stag">Java</span><span class="stag">C</span>
+          </div>
         </div>
-        <div class="skills-category">
-          <div class="skills-cat-label">Outils</div>
-          <span class="skill-tag">Git</span><span class="skill-tag">GitHub</span><span class="skill-tag">VS Code</span><span class="skill-tag">Linux</span><span class="skill-tag">Docker</span>
+        <div class="skill-cat">
+          <div class="skill-cat-label">Outils</div>
+          <div class="skill-tags">
+            <span class="stag">Git</span><span class="stag">GitHub</span><span class="stag">VS Code</span><span class="stag">Linux</span><span class="stag">Docker</span>
+          </div>
         </div>
-        <div class="skills-category">
-          <div class="skills-cat-label">Domaines</div>
-          <span class="skill-tag">Web Dev</span><span class="skill-tag">Algorithmique</span><span class="skill-tag">Base de données</span><span class="skill-tag">POO</span><span class="skill-tag">Réseaux</span>
+        <div class="skill-cat">
+          <div class="skill-cat-label">Domaines</div>
+          <div class="skill-tags">
+            <span class="stag">Web Dev</span><span class="stag">Algorithmique</span><span class="stag">Base de données</span><span class="stag">POO</span><span class="stag">Réseaux</span>
+          </div>
         </div>
       </div>
       <div id="skillsMain">
@@ -862,7 +1307,7 @@
         </div>
         <div class="skill-bar-item">
           <div class="skill-bar-header"><span class="skill-bar-name">Python</span><span class="skill-bar-pct">78%</span></div>
-          <div class="skill-bar-track"><div class="skill-bar-fill red" style="width:78%"></div></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" style="width:78%"></div></div>
         </div>
         <div class="skill-bar-item">
           <div class="skill-bar-header"><span class="skill-bar-name">JavaScript</span><span class="skill-bar-pct">70%</span></div>
@@ -870,7 +1315,7 @@
         </div>
         <div class="skill-bar-item">
           <div class="skill-bar-header"><span class="skill-bar-name">SQL / Bases de données</span><span class="skill-bar-pct">72%</span></div>
-          <div class="skill-bar-track"><div class="skill-bar-fill red" style="width:72%"></div></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" style="width:72%"></div></div>
         </div>
         <div class="skill-bar-item">
           <div class="skill-bar-header"><span class="skill-bar-name">Git / Versioning</span><span class="skill-bar-pct">65%</span></div>
@@ -878,7 +1323,7 @@
         </div>
         <div class="skill-bar-item">
           <div class="skill-bar-header"><span class="skill-bar-name">Linux / Terminal</span><span class="skill-bar-pct">60%</span></div>
-          <div class="skill-bar-track"><div class="skill-bar-fill red" style="width:60%"></div></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" style="width:60%"></div></div>
         </div>
       </div>
     </div>
@@ -887,14 +1332,17 @@
 
 <!-- ══════ CONTACT ══════ -->
 <section id="contact" class="page">
-  <div class="section-wrap">
-    <div class="section-header">
-      <div class="section-num">04</div>
-      <div>
-        <div class="section-sub">連絡 — Communication</div>
-        <h2 class="section-title">Me contacter</h2>
+  <div class="page-header">
+    <div class="page-header-blob"></div>
+    <div class="page-header-inner">
+      <div class="page-num">04</div>
+      <div class="page-title-group">
+        <div class="page-eyebrow">連絡 — Communication</div>
+        <h2 class="page-title">Me contacter</h2>
       </div>
     </div>
+  </div>
+  <div class="page-content">
     <div class="contact-layout">
       <div>
         <h3 class="contact-tagline">Travaillons ensemble sur votre <em>prochain projet.</em></h3>
@@ -918,7 +1366,7 @@
           </a>
         </div>
       </div>
-      <div>
+      <div class="form-card">
         <div class="form-group">
           <label class="form-label">Votre nom</label>
           <input type="text" class="form-input" placeholder="Tanaka Hiroshi">
@@ -942,50 +1390,51 @@
 </section>
 
 <footer>
-  <span>© 2025 — Marius Holay</span>
+  <div class="footer-logo">M.Holay</div>
   <span class="footer-kanji">技術・創造・情熱</span>
-  <span>Aulnoye-Aymeries, France</span>
+  <span>© 2025 · Aulnoye-Aymeries</span>
 </footer>
 
 <script>
   function showPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     const t = document.getElementById(id);
-    if (t) { t.classList.add('active'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    if (t) { t.classList.add('active'); window.scrollTo({top:0, behavior:'smooth'}); }
     if (id === 'skills') {
-      setTimeout(() => document.querySelectorAll('.skill-bar-fill').forEach(b => b.classList.add('animated')), 150);
+      setTimeout(() => document.querySelectorAll('.skill-bar-fill').forEach(b => b.classList.add('animated')), 200);
     }
   }
 
-  // ── Falling sakura petals (home only) ──
-  const petalColors = ['#f4b8c8','#fce8ef','#f9d0dc','#e8a0b4','#fbd5e4'];
+  // Falling sakura petals
+  const petalColors = ['#f2a7c3','#fce4ef','#fbd5e4','#e8a0b8','#f9d0dc'];
 
   function createPetal() {
     if (!document.getElementById('home').classList.contains('active')) return;
     const p = document.createElement('div');
     p.className = 'petal';
-    const s = Math.random() * 9 + 5;
+    const s = Math.random() * 10 + 6;
     p.style.cssText = `
-      width:${s}px; height:${s*1.2}px;
+      width:${s}px; height:${s*1.3}px;
       left:${Math.random()*100}vw; top:-20px;
       background:${petalColors[Math.floor(Math.random()*petalColors.length)]};
-      animation-duration:${Math.random()*7+7}s;
-      animation-delay:${Math.random()*2}s;
       border-radius:${Math.random()>0.5?'50% 0 50% 0':'0 50% 0 50%'};
+      animation-duration:${Math.random()*8+8}s;
+      animation-delay:${Math.random()*3}s;
+      opacity:${Math.random()*0.5+0.4};
     `;
     document.body.appendChild(p);
-    setTimeout(() => p.remove(), 16000);
+    setTimeout(() => p.remove(), 18000);
   }
 
-  setInterval(createPetal, 700);
+  setInterval(createPetal, 650);
 
-  // ── Skill bars observer ──
-  const skillsMain = document.getElementById('skillsMain');
-  if (skillsMain) {
+  // Skill bars
+  const sm = document.getElementById('skillsMain');
+  if (sm) {
     new IntersectionObserver(entries => {
       if (entries[0].isIntersecting)
         document.querySelectorAll('.skill-bar-fill').forEach(b => b.classList.add('animated'));
-    }, { threshold: 0.3 }).observe(skillsMain);
+    }, {threshold:0.3}).observe(sm);
   }
 </script>
 </body>
