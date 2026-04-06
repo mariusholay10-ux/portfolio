@@ -8,113 +8,136 @@
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Zen+Kaku+Gothic+New:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --sakura:    #f2a7c3;
-  --sakura-l:  #fce4ef;
-  --sakura-ll: #fff0f6;
-  --violet:    #6b3fa0;
-  --violet-l:  #9b6fcf;
-  --violet-ll: #e8d8f8;
-  --violet-d:  #3a1f6a;
-  --white:     #ffffff;
-  --soft:      #fdf6fb;
-  --ink:       #2a1a3e;
-  --muted:     #9b7db0;
-  --gold:      #e8b86d;
+  --sakura:#f2a7c3; --sakura-l:#fce4ef; --sakura-ll:#fff0f6;
+  --violet:#6b3fa0; --violet-l:#9b6fcf; --violet-ll:#e8d8f8; --violet-d:#3a1f6a;
+  --white:#ffffff; --soft:#fdf6fb; --ink:#2a1a3e; --muted:#9b7db0; --gold:#e8b86d;
 }
- 
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{font-family:'Zen Kaku Gothic New',sans-serif;background:var(--soft);color:var(--ink);overflow-x:hidden;}
- 
-/* NAV */
+body{font-family:'Zen Kaku Gothic New',sans-serif;background:var(--soft);color:var(--ink);overflow-x:hidden;cursor:none;}
+
+/* ══ CUSTOM CURSOR ══ */
+#cursor-dot{
+  position:fixed;width:12px;height:12px;
+  background:var(--sakura);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform .1s,background .3s,width .2s,height .2s;
+  mix-blend-mode:multiply;
+}
+#cursor-ring{
+  position:fixed;width:36px;height:36px;
+  border:2px solid rgba(242,167,195,.6);border-radius:50%;
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:transform .18s ease,border-color .3s,width .25s,height .25s;
+}
+body:hover #cursor-dot{opacity:1;}
+.cursor-hover #cursor-dot{width:20px;height:20px;background:var(--violet);}
+.cursor-hover #cursor-ring{width:50px;height:50px;border-color:rgba(107,63,160,.5);}
+
+/* Sakura trail particle */
+.trail-petal{
+  position:fixed;pointer-events:none;z-index:9997;
+  border-radius:50% 0 50% 0;
+  animation:trailFade .8s ease-out forwards;
+}
+@keyframes trailFade{
+  0%{opacity:.8;transform:scale(1) rotate(0deg);}
+  100%{opacity:0;transform:scale(0) rotate(180deg) translateY(20px);}
+}
+
+/* Click burst */
+.click-burst{
+  position:fixed;pointer-events:none;z-index:9996;
+  animation:burstOut .6s ease-out forwards;
+}
+@keyframes burstOut{
+  0%{opacity:1;transform:scale(0) rotate(0deg);}
+  60%{opacity:.8;}
+  100%{opacity:0;transform:scale(1.5) rotate(120deg);}
+}
+
+/* ══ INK TRANSITION ══ */
+#ink-overlay{
+  position:fixed;inset:0;z-index:5000;
+  pointer-events:none;
+  display:flex;align-items:center;justify-content:center;
+}
+.ink-circle{
+  width:0;height:0;
+  border-radius:50%;
+  background:radial-gradient(circle,var(--violet-d) 0%,var(--violet) 40%,var(--sakura) 100%);
+  position:absolute;
+  transform:translate(-50%,-50%);
+  transition:none;
+}
+
+/* ══ NAV ══ */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:300;
   display:flex;align-items:center;justify-content:space-between;
   padding:1.2rem 3rem;
-  background:rgba(255,240,246,0.9);
+  background:rgba(255,240,246,.92);
   backdrop-filter:blur(16px);
-  border-bottom:1px solid rgba(242,167,195,0.25);
+  border-bottom:1px solid rgba(242,167,195,.25);
 }
-.nav-logo{font-family:'Shippori Mincho',serif;font-size:1.3rem;font-weight:800;color:var(--violet);cursor:pointer;display:flex;align-items:center;gap:.5rem;}
-.nav-dot{width:10px;height:10px;background:var(--sakura);border-radius:50%;display:inline-block;}
+.nav-logo{font-family:'Shippori Mincho',serif;font-size:1.3rem;font-weight:800;color:var(--violet);cursor:none;display:flex;align-items:center;gap:.5rem;}
+.nav-dot{width:10px;height:10px;background:var(--sakura);border-radius:50%;display:inline-block;animation:navdot 2s ease-in-out infinite;}
+@keyframes navdot{0%,100%{transform:scale(1);}50%{transform:scale(1.4);}}
 .nav-links{display:flex;gap:2.2rem;list-style:none;}
-.nav-links a{text-decoration:none;color:var(--muted);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:color .3s;position:relative;}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;cursor:none;transition:color .3s;position:relative;}
 .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--sakura);border-radius:2px;transition:width .3s;}
 .nav-links a:hover{color:var(--violet);}
 .nav-links a:hover::after{width:100%;}
- 
-/* PAGES */
-.page{display:none;min-height:100vh;padding-top:70px;animation:fadeIn .5s ease;}
+.nav-links a.active-link{color:var(--violet);}
+.nav-links a.active-link::after{width:100%;}
+
+/* ══ PAGES ══ */
+.page{display:none;min-height:100vh;padding-top:70px;}
 .page.active{display:block;}
 #home{display:none;padding-top:70px;}
 #home.active{display:block;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
- 
-/* BUTTONS */
-.btn{display:inline-block;padding:.9rem 2.2rem;font-family:'Zen Kaku Gothic New',sans-serif;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;cursor:pointer;border:none;border-radius:999px;transition:all .3s;font-weight:700;}
+
+/* ══ BUTTONS ══ */
+.btn{display:inline-block;padding:.9rem 2.2rem;font-family:'Zen Kaku Gothic New',sans-serif;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;cursor:none;border:none;border-radius:999px;transition:all .3s;font-weight:700;}
 .btn-primary{background:linear-gradient(135deg,var(--sakura),var(--violet));color:white;box-shadow:0 8px 30px rgba(107,63,160,.3);}
 .btn-primary:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(107,63,160,.45);}
 .btn-outline{background:white;color:var(--violet);border:2px solid var(--sakura);}
 .btn-outline:hover{background:var(--sakura-l);transform:translateY(-3px);}
- 
-/* ═══════════════════════════════════
-   HERO
-═══════════════════════════════════ */
-.hero{
-  min-height:calc(100vh - 70px);
-  position:relative;overflow:hidden;
-  display:flex;align-items:center;
-  background:linear-gradient(135deg,var(--sakura-ll) 0%,var(--white) 40%,var(--violet-ll) 100%);
-}
-.hero-blob{
-  position:absolute;top:-10%;right:-5%;width:62%;height:120%;
-  background:linear-gradient(160deg,var(--sakura) 0%,var(--violet-l) 55%,var(--violet) 100%);
-  border-radius:60% 40% 30% 70%/50% 60% 40% 50%;
-  animation:blobmorph 9s ease-in-out infinite;opacity:.93;
-}
-@keyframes blobmorph{
-  0%,100%{border-radius:60% 40% 30% 70%/50% 60% 40% 50%;}
-  25%{border-radius:50% 50% 60% 40%/40% 50% 60% 50%;}
-  50%{border-radius:40% 60% 50% 50%/60% 40% 50% 60%;}
-  75%{border-radius:55% 45% 40% 60%/45% 55% 50% 55%;}
-}
+
+/* ══ HERO ══ */
+.hero{min-height:calc(100vh - 70px);position:relative;overflow:hidden;display:flex;align-items:center;background:linear-gradient(135deg,var(--sakura-ll) 0%,var(--white) 40%,var(--violet-ll) 100%);}
+.hero-blob{position:absolute;top:-10%;right:-5%;width:62%;height:120%;background:linear-gradient(160deg,var(--sakura) 0%,var(--violet-l) 55%,var(--violet) 100%);border-radius:60% 40% 30% 70%/50% 60% 40% 50%;animation:blobmorph 9s ease-in-out infinite;opacity:.93;}
+@keyframes blobmorph{0%,100%{border-radius:60% 40% 30% 70%/50% 60% 40% 50%;}25%{border-radius:50% 50% 60% 40%/40% 50% 60% 50%;}50%{border-radius:40% 60% 50% 50%/60% 40% 50% 60%;}75%{border-radius:55% 45% 40% 60%/45% 55% 50% 55%;}}
 .hero-illustration{position:absolute;right:0;bottom:0;width:60%;height:100%;pointer-events:none;}
 .sakura-br-tr{position:absolute;top:-2%;right:4%;width:340px;pointer-events:none;z-index:5;animation:sway 6s ease-in-out infinite;transform-origin:top right;}
-.sakura-br-bl{position:absolute;bottom:-3%;left:-2%;width:200px;pointer-events:none;z-index:5;transform:scaleX(-1) rotate(-20deg);animation:sway 7s ease-in-out infinite reverse;transform-origin:bottom left;}
 @keyframes sway{0%,100%{transform:rotate(0deg);}50%{transform:rotate(3deg);}}
-.sakura-br-bl-flip{position:absolute;bottom:-3%;left:-2%;width:200px;pointer-events:none;z-index:5;animation:swaybl 7s ease-in-out infinite reverse;transform-origin:bottom left;}
-@keyframes swaybl{0%,100%{transform:scaleX(-1) rotate(-20deg);}50%{transform:scaleX(-1) rotate(-17deg);}}
- 
 .hero-content{position:relative;z-index:10;padding:3rem 3rem 3rem 8%;max-width:52%;}
-.hero-badge{display:inline-flex;align-items:center;gap:.6rem;background:white;border:1.5px solid var(--sakura);border-radius:999px;padding:.4rem 1.2rem;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--violet);margin-bottom:1.8rem;box-shadow:0 4px 20px rgba(242,167,195,.25);}
-.hero-name{font-family:'Shippori Mincho',serif;font-size:clamp(3rem,6.5vw,6rem);font-weight:800;line-height:1.05;letter-spacing:-.02em;color:var(--ink);margin-bottom:1.5rem;}
+.hero-badge{display:inline-flex;align-items:center;gap:.6rem;background:white;border:1.5px solid var(--sakura);border-radius:999px;padding:.4rem 1.2rem;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--violet);margin-bottom:1.8rem;box-shadow:0 4px 20px rgba(242,167,195,.25);animation:badgePop .6s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes badgePop{from{opacity:0;transform:scale(.8);}to{opacity:1;transform:scale(1);}}
+.hero-name{font-family:'Shippori Mincho',serif;font-size:clamp(3rem,6.5vw,6rem);font-weight:800;line-height:1.05;letter-spacing:-.02em;color:var(--ink);margin-bottom:1.5rem;animation:slideUp .8s cubic-bezier(.16,1,.3,1) .2s both;}
 .hero-name em{font-style:normal;background:linear-gradient(135deg,var(--sakura),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.hero-sub{font-size:1rem;line-height:1.9;color:var(--muted);font-weight:300;max-width:400px;margin-bottom:2.5rem;}
-.hero-cta{display:flex;gap:1rem;flex-wrap:wrap;}
- 
-.scroll-arrow{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--muted);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;z-index:10;animation:bobble 2s ease-in-out infinite;}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+.hero-sub{font-size:1rem;line-height:1.9;color:var(--muted);font-weight:300;max-width:400px;margin-bottom:2.5rem;animation:slideUp .8s cubic-bezier(.16,1,.3,1) .4s both;}
+.hero-cta{display:flex;gap:1rem;flex-wrap:wrap;animation:slideUp .8s cubic-bezier(.16,1,.3,1) .6s both;}
+.scroll-arrow{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--muted);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;cursor:none;z-index:10;animation:bobble 2s ease-in-out infinite;}
 @keyframes bobble{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(7px);}}
- 
-/* Petals */
+
+/* ══ PETALS ══ */
 .petal{position:fixed;pointer-events:none;z-index:200;animation:petalfall linear infinite;}
 @keyframes petalfall{0%{opacity:0;transform:translateY(-20px) rotate(0deg) translateX(0);}10%{opacity:.8;}90%{opacity:.5;}100%{opacity:0;transform:translateY(105vh) rotate(540deg) translateX(40px);}}
- 
-/* ═══════════════════════════════════
-   HOME BANDS
-═══════════════════════════════════ */
+
+/* ══ BANDS ══ */
 .band{padding:6rem 3rem;position:relative;overflow:hidden;}
 .band-inner{max-width:1100px;margin:0 auto;position:relative;z-index:2;}
- 
-/* Band blobs */
-.band-blob{position:absolute;border-radius:60% 40% 50% 50%/50% 60% 40% 50%;opacity:.12;pointer-events:none;}
- 
+.band-blob{position:absolute;border-radius:60% 40% 50% 50%/50% 60% 40% 50%;opacity:.12;pointer-events:none;animation:blobmorph 10s ease-in-out infinite;}
 .band-violet{background:linear-gradient(135deg,var(--violet) 0%,var(--violet-d) 100%);color:white;}
 .band-white{background:var(--white);}
 .band-soft{background:var(--soft);}
-.band-sakura{background:linear-gradient(135deg,var(--sakura-ll),var(--violet-ll));}
 .band-gradient{background:linear-gradient(160deg,var(--sakura-ll) 0%,var(--violet-ll) 50%,var(--sakura-ll) 100%);}
- 
-/* Band 1 intro */
+
+/* Band intro */
 .band-intro-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:4rem;align-items:center;}
 .band-quote{font-family:'Shippori Mincho',serif;font-size:clamp(1.4rem,2.5vw,2.1rem);font-weight:600;line-height:1.55;color:white;}
 .band-quote em{font-style:normal;color:var(--sakura);}
@@ -124,26 +147,22 @@ nav{
 .bstat-num{font-family:'Shippori Mincho',serif;font-size:2.6rem;font-weight:800;color:var(--sakura);line-height:1;}
 .bstat-num span{font-size:1.4rem;}
 .bstat-label{font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-top:.3rem;}
- 
-/* Band label */
+
 .band-label{font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--violet);margin-bottom:2.5rem;display:flex;align-items:center;gap:1rem;font-weight:700;}
 .band-label::after{content:'';flex:1;height:1.5px;background:linear-gradient(to right,rgba(242,167,195,.4),transparent);}
-.band-label-light{color:rgba(255,255,255,.6);}
-.band-label-light::after{background:linear-gradient(to right,rgba(255,255,255,.2),transparent);}
- 
-/* Skills pills */
+
 .pills{display:flex;flex-wrap:wrap;gap:.7rem;}
-.pill{padding:.55rem 1.3rem;border-radius:999px;font-size:.82rem;cursor:default;transition:all .25s;font-weight:400;}
+.pill{padding:.55rem 1.3rem;border-radius:999px;font-size:.82rem;cursor:none;transition:all .25s;font-weight:400;}
 .pill-outline{border:1.5px solid rgba(107,63,160,.2);color:var(--violet);background:white;}
 .pill-outline:hover{background:linear-gradient(135deg,var(--sakura),var(--violet));color:white;border-color:transparent;transform:translateY(-3px);box-shadow:0 6px 20px rgba(107,63,160,.25);}
 .pill-filled{background:linear-gradient(135deg,var(--sakura),var(--violet-l));color:white;border:none;}
 .pill-filled:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(107,63,160,.3);}
- 
-/* Featured band */
+
+/* Featured */
 .featured-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
-.featured-card{background:white;border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(107,63,160,.12);border:1px solid rgba(242,167,195,.2);transition:all .3s;}
-.featured-card:hover{transform:translateY(-8px);box-shadow:0 30px 80px rgba(107,63,160,.2);}
-.featured-card-img{height:200px;display:flex;align-items:center;justify-content:center;font-family:'Shippori Mincho',serif;font-size:6rem;color:white;position:relative;overflow:hidden;}
+.featured-card{background:white;border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(107,63,160,.12);border:1px solid rgba(242,167,195,.2);transition:all .4s cubic-bezier(.16,1,.3,1);}
+.featured-card:hover{transform:translateY(-10px) rotate(-1deg);box-shadow:0 30px 80px rgba(107,63,160,.22);}
+.featured-card-img{height:200px;display:flex;align-items:center;justify-content:center;font-family:'Shippori Mincho',serif;font-size:6rem;color:rgba(255,255,255,.9);position:relative;overflow:hidden;}
 .featured-card-img::after{content:'';position:absolute;bottom:-20px;left:-10%;width:120%;height:40px;background:white;border-radius:50%;}
 .fci-1{background:linear-gradient(135deg,#f2a7c3,#9b6fcf);}
 .featured-card-body{padding:2rem;}
@@ -154,48 +173,98 @@ nav{
 .tc{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;background:var(--violet-ll);color:var(--violet);padding:.2rem .7rem;border-radius:999px;font-weight:700;}
 .featured-text h3{font-family:'Shippori Mincho',serif;font-size:2rem;font-weight:600;color:var(--ink);margin-bottom:1rem;line-height:1.35;}
 .featured-text p{font-size:.9rem;line-height:1.9;color:var(--muted);margin-bottom:2rem;}
- 
-/* CTA band */
+
+/* CTA */
 .cta-center{text-align:center;}
-.cta-kanji{font-family:'Shippori Mincho',serif;font-size:5rem;background:linear-gradient(135deg,var(--sakura),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:.3;line-height:1;margin-bottom:.5rem;}
-.cta-title{font-family:'Shippori Mincho',serif;font-size:2.2rem;font-weight:600;color:var(--ink);margin-bottom:1rem;}
-.cta-sub{font-size:.95rem;color:var(--muted);margin-bottom:2.5rem;line-height:1.8;}
- 
-/* ═══════════════════════════════════
-   PAGE HEADERS
-═══════════════════════════════════ */
-.page-header{
-  position:relative;padding:4rem 3rem 3rem;overflow:hidden;
-  background:linear-gradient(135deg,var(--sakura-ll) 0%,var(--violet-ll) 100%);
-  min-height:220px;display:flex;align-items:flex-end;
+.cta-kanji{font-family:'Shippori Mincho',serif;font-size:5rem;color:rgba(242,167,195,.3);line-height:1;margin-bottom:.5rem;}
+.cta-title{font-family:'Shippori Mincho',serif;font-size:2.2rem;font-weight:600;color:white;margin-bottom:1rem;}
+.cta-sub{font-size:.95rem;color:rgba(255,255,255,.6);margin-bottom:2.5rem;line-height:1.8;}
+
+/* ══ PAGE HEADERS ══ */
+.page-header{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--sakura-ll) 0%,var(--violet-ll) 100%);}
+
+/* À PROPOS header — left aligned big */
+.ph-about{
+  padding:5rem 3rem 4rem;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4rem;
+  align-items:center;
+  max-width:1100px;
+  margin:0 auto;
 }
-.ph-blob1{position:absolute;width:400px;height:400px;top:-150px;right:-80px;background:linear-gradient(135deg,var(--sakura),var(--violet-l));border-radius:60% 40% 50% 50%/50% 60% 40% 50%;opacity:.2;animation:blobmorph 10s ease-in-out infinite;}
-.ph-blob2{position:absolute;width:250px;height:250px;bottom:-100px;left:10%;background:linear-gradient(135deg,var(--violet-l),var(--sakura));border-radius:40% 60% 50% 50%/60% 40% 60% 40%;opacity:.12;animation:blobmorph 12s ease-in-out infinite reverse;}
-.ph-inner{position:relative;z-index:2;max-width:1100px;margin:0 auto;display:flex;align-items:flex-end;gap:2rem;width:100%;}
-.ph-num{font-family:'Shippori Mincho',serif;font-size:5rem;font-weight:800;color:rgba(107,63,160,.08);line-height:1;user-select:none;}
-.ph-eyebrow{font-size:.68rem;letter-spacing:.35em;text-transform:uppercase;color:var(--sakura);margin-bottom:.3rem;font-weight:700;}
-.ph-title{font-family:'Shippori Mincho',serif;font-size:2.4rem;font-weight:600;color:var(--ink);letter-spacing:-.02em;}
- 
-/* Page illus deco */
-.ph-illus{position:absolute;right:3rem;bottom:0;height:160px;opacity:.15;pointer-events:none;}
- 
+.ph-about-left{}
+.ph-about-eyebrow{font-size:.68rem;letter-spacing:.35em;text-transform:uppercase;color:var(--sakura);margin-bottom:.8rem;font-weight:700;}
+.ph-about-title{font-family:'Shippori Mincho',serif;font-size:clamp(2.5rem,5vw,4.5rem);font-weight:800;color:var(--ink);line-height:1.1;letter-spacing:-.02em;}
+.ph-about-title em{font-style:normal;background:linear-gradient(135deg,var(--sakura),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.ph-about-sub{font-size:.95rem;color:var(--muted);line-height:1.8;margin-top:1.2rem;}
+
+/* PROJETS header — centered + wave */
+.ph-projects-wrap{
+  padding:5rem 3rem 0;
+  text-align:center;
+  position:relative;
+}
+.ph-projects-num{font-family:'Shippori Mincho',serif;font-size:10rem;font-weight:800;color:rgba(107,63,160,.05);line-height:1;position:absolute;top:1rem;left:50%;transform:translateX(-50%);white-space:nowrap;user-select:none;}
+.ph-projects-eyebrow{font-size:.68rem;letter-spacing:.35em;text-transform:uppercase;color:var(--sakura);margin-bottom:.8rem;font-weight:700;position:relative;}
+.ph-projects-title{font-family:'Shippori Mincho',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:800;color:var(--ink);position:relative;}
+.ph-wave{display:block;margin-top:2rem;width:100%;}
+
+/* COMPÉTENCES header — diagonal split */
+.ph-skills-wrap{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  min-height:250px;
+  overflow:hidden;
+}
+.ph-skills-left{
+  background:linear-gradient(135deg,var(--violet),var(--violet-d));
+  padding:3.5rem;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  position:relative;
+  clip-path:polygon(0 0,95% 0,85% 100%,0 100%);
+}
+.ph-skills-right{
+  background:linear-gradient(135deg,var(--sakura-ll),var(--violet-ll));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:2rem;
+}
+.ph-skills-eyebrow{font-size:.68rem;letter-spacing:.35em;text-transform:uppercase;color:var(--sakura);margin-bottom:.8rem;font-weight:700;}
+.ph-skills-title{font-family:'Shippori Mincho',serif;font-size:2.5rem;font-weight:800;color:white;line-height:1.1;}
+
+/* CONTACT header — full bleed avec illustration centrée */
+.ph-contact-wrap{
+  padding:5rem 3rem 4rem;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(135deg,var(--violet),var(--violet-d));
+}
+.ph-contact-blob1{position:absolute;width:400px;height:400px;top:-150px;right:-80px;background:linear-gradient(135deg,var(--sakura),var(--violet-l));border-radius:60% 40% 50% 50%/50% 60% 40% 50%;opacity:.2;animation:blobmorph 10s ease-in-out infinite;}
+.ph-contact-blob2{position:absolute;width:250px;height:250px;bottom:-100px;left:5%;background:linear-gradient(135deg,var(--violet-l),var(--sakura));border-radius:40% 60% 50% 50%/60% 40% 60% 40%;opacity:.15;animation:blobmorph 12s ease-in-out infinite reverse;}
+.ph-contact-eyebrow{font-size:.68rem;letter-spacing:.35em;text-transform:uppercase;color:var(--sakura);margin-bottom:.8rem;font-weight:700;position:relative;z-index:2;}
+.ph-contact-title{font-family:'Shippori Mincho',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:800;color:white;position:relative;z-index:2;margin-bottom:1rem;}
+.ph-contact-sub{font-size:.95rem;color:rgba(255,255,255,.6);position:relative;z-index:2;max-width:500px;margin:0 auto;}
+
 .page-content{max-width:1100px;margin:0 auto;padding:4rem 3rem;}
- 
-/* ═══════════════════════════════════
-   À PROPOS
-═══════════════════════════════════ */
+
+/* ══ À PROPOS ══ */
 .about-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:5rem;align-items:start;}
 .portrait-wrap{position:relative;}
 .portrait-deco{position:absolute;top:-20px;right:-20px;width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,var(--sakura),var(--violet-l));opacity:.25;z-index:-1;}
 .portrait-deco2{position:absolute;bottom:-15px;left:-15px;width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--violet-l),var(--sakura));opacity:.2;z-index:-1;}
-.portrait-box{width:100%;aspect-ratio:3/4;background:linear-gradient(135deg,var(--sakura-l),var(--violet-ll));border-radius:28px;overflow:hidden;position:relative;box-shadow:0 20px 60px rgba(107,63,160,.15);}
-<img src="photo.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top;" alt="Marius Holay">
+.portrait-box{width:100%;aspect-ratio:3/4;background:linear-gradient(135deg,var(--sakura-l),var(--violet-ll));border-radius:28px;overflow:hidden;position:relative;box-shadow:0 20px 60px rgba(107,63,160,.15);transition:transform .4s cubic-bezier(.16,1,.3,1);}
+.portrait-box:hover{transform:scale(1.02) rotate(1deg);}
+.portrait-box img{width:100%;height:100%;object-fit:cover;object-position:top;}
+.portrait-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Shippori Mincho',serif;}
 .portrait-kanji{font-size:7rem;color:rgba(107,63,160,.12);line-height:1;}
 .portrait-hint{font-size:.62rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-top:1rem;}
- 
-/* Sakura deco inside portrait */
 .portrait-sakura{position:absolute;top:0;right:0;width:120px;opacity:.3;}
- 
+
 .about-tag{display:inline-flex;align-items:center;gap:.5rem;background:var(--sakura-l);color:var(--violet);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;padding:.4rem 1rem;border-radius:999px;margin-bottom:1.5rem;font-weight:700;}
 .about-intro{font-family:'Shippori Mincho',serif;font-size:1.45rem;font-weight:600;line-height:1.55;color:var(--ink);margin-bottom:1.5rem;}
 .about-body{font-size:.93rem;line-height:2;color:var(--muted);margin-bottom:2.5rem;}
@@ -204,24 +273,19 @@ nav{
 .astat:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(107,63,160,.15);}
 .astat-num{font-family:'Shippori Mincho',serif;font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--sakura),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:.3rem;}
 .astat-label{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
- 
-/* About page extra sections */
+
 .about-extras{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:4rem;}
-.about-extra-card{background:white;border-radius:24px;padding:2.5rem;box-shadow:0 8px 30px rgba(107,63,160,.08);border:1px solid rgba(242,167,195,.15);position:relative;overflow:hidden;}
+.about-extra-card{background:white;border-radius:24px;padding:2.5rem;box-shadow:0 8px 30px rgba(107,63,160,.08);border:1px solid rgba(242,167,195,.15);position:relative;overflow:hidden;transition:all .4s cubic-bezier(.16,1,.3,1);}
+.about-extra-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(107,63,160,.18);}
 .about-extra-card::before{content:'';position:absolute;top:-40px;right:-40px;width:150px;height:150px;background:linear-gradient(135deg,var(--sakura-l),var(--violet-ll));border-radius:50%;opacity:.5;}
 .aec-icon{font-family:'Shippori Mincho',serif;font-size:2.5rem;margin-bottom:1rem;display:block;}
 .aec-title{font-family:'Shippori Mincho',serif;font-size:1.2rem;font-weight:600;margin-bottom:.8rem;color:var(--ink);}
 .aec-body{font-size:.85rem;line-height:1.8;color:var(--muted);}
- 
-/* ═══════════════════════════════════
-   PROJETS
-═══════════════════════════════════ */
-.projects-intro{text-align:center;margin-bottom:3.5rem;}
-.projects-intro p{font-size:.95rem;color:var(--muted);max-width:500px;margin:.8rem auto 0;}
- 
+
+/* ══ PROJETS ══ */
 .projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
-.project-card{background:white;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(107,63,160,.08);border:1px solid rgba(242,167,195,.15);transition:all .3s;cursor:pointer;}
-.project-card:hover{transform:translateY(-8px);box-shadow:0 24px 60px rgba(107,63,160,.2);}
+.project-card{background:white;border-radius:24px;overflow:hidden;box-shadow:0 8px 30px rgba(107,63,160,.08);border:1px solid rgba(242,167,195,.15);transition:all .4s cubic-bezier(.16,1,.3,1);cursor:none;}
+.project-card:hover{transform:translateY(-10px) rotate(.5deg);box-shadow:0 28px 60px rgba(107,63,160,.22);}
 .project-card-top{height:130px;display:flex;align-items:center;justify-content:center;font-family:'Shippori Mincho',serif;font-size:3.5rem;color:rgba(255,255,255,.9);position:relative;overflow:hidden;}
 .project-card-top::after{content:'';position:absolute;bottom:-20px;left:-10%;width:120%;height:40px;background:white;border-radius:50%;}
 .pct1{background:linear-gradient(135deg,#f2a7c3,#9b6fcf);}
@@ -236,31 +300,17 @@ nav{
 .project-desc{font-size:.82rem;line-height:1.75;color:var(--muted);margin-bottom:1.2rem;}
 .project-chips{display:flex;flex-wrap:wrap;gap:.4rem;}
 .pchip{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;background:var(--violet-ll);color:var(--violet);padding:.2rem .65rem;border-radius:999px;font-weight:700;}
- 
-/* ═══════════════════════════════════
-   COMPÉTENCES
-═══════════════════════════════════ */
-.skills-hero-band{
-  background:linear-gradient(135deg,var(--violet),var(--violet-d));
-  padding:4rem 3rem;position:relative;overflow:hidden;
-}
-.skills-hero-inner{max-width:1100px;margin:0 auto;position:relative;z-index:2;}
-.skills-hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
-.skills-hero-text h3{font-family:'Shippori Mincho',serif;font-size:2rem;font-weight:600;color:white;margin-bottom:1rem;line-height:1.4;}
-.skills-hero-text p{font-size:.9rem;line-height:1.9;color:rgba(255,255,255,.6);}
-.skills-blob{position:absolute;width:300px;height:300px;top:-100px;right:-50px;background:linear-gradient(135deg,var(--sakura),var(--violet-l));border-radius:60% 40% 50% 50%/50% 60% 40% 50%;opacity:.2;animation:blobmorph 8s ease-in-out infinite;}
- 
+
+/* ══ COMPÉTENCES ══ */
 .skills-content{padding:4rem 3rem;}
 .skills-content-inner{max-width:1100px;margin:0 auto;}
 .skills-layout{display:grid;grid-template-columns:1fr 2fr;gap:4rem;}
- 
 .skill-cat{margin-bottom:2.5rem;}
 .skill-cat-label{font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--violet);margin-bottom:1rem;font-weight:700;display:flex;align-items:center;gap:.7rem;}
 .skill-cat-label::after{content:'';flex:1;height:1px;background:rgba(107,63,160,.15);}
 .skill-tags{display:flex;flex-wrap:wrap;gap:.5rem;}
-.stag{display:inline-block;padding:.35rem .9rem;border-radius:999px;font-size:.78rem;background:white;border:1.5px solid rgba(242,167,195,.4);color:var(--muted);cursor:default;transition:all .2s;box-shadow:0 2px 8px rgba(107,63,160,.06);}
+.stag{display:inline-block;padding:.35rem .9rem;border-radius:999px;font-size:.78rem;background:white;border:1.5px solid rgba(242,167,195,.4);color:var(--muted);cursor:none;transition:all .2s;box-shadow:0 2px 8px rgba(107,63,160,.06);}
 .stag:hover{background:linear-gradient(135deg,var(--sakura),var(--violet-l));color:white;border-color:transparent;transform:translateY(-2px);}
- 
 .skill-bar-item{margin-bottom:2rem;}
 .skill-bar-header{display:flex;justify-content:space-between;margin-bottom:.7rem;}
 .skill-bar-name{font-family:'Shippori Mincho',serif;font-size:1rem;font-weight:600;color:var(--ink);}
@@ -268,178 +318,129 @@ nav{
 .skill-bar-track{height:8px;background:rgba(107,63,160,.08);border-radius:999px;overflow:hidden;}
 .skill-bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--sakura),var(--violet));transform:scaleX(0);transform-origin:left;transition:transform 1.2s cubic-bezier(.16,1,.3,1);}
 .skill-bar-fill.animated{transform:scaleX(1);}
- 
-/* ═══════════════════════════════════
-   CONTACT
-═══════════════════════════════════ */
-.contact-hero-band{
-  background:linear-gradient(135deg,var(--sakura-ll),var(--violet-ll));
-  padding:5rem 3rem;position:relative;overflow:hidden;
-}
-.contact-hero-inner{max-width:1100px;margin:0 auto;position:relative;z-index:2;}
-.contact-hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
-.ch-blob1{position:absolute;width:350px;height:350px;top:-120px;right:-60px;background:linear-gradient(135deg,var(--sakura),var(--violet-l));border-radius:60% 40% 50% 50%/50% 60% 40% 50%;opacity:.18;animation:blobmorph 9s ease-in-out infinite;}
-.ch-blob2{position:absolute;width:200px;height:200px;bottom:-80px;left:5%;background:linear-gradient(135deg,var(--violet-l),var(--sakura));border-radius:40% 60% 50% 50%/60% 40% 60% 40%;opacity:.12;animation:blobmorph 11s ease-in-out infinite reverse;}
- 
-.contact-tagline{font-family:'Shippori Mincho',serif;font-size:2.2rem;font-weight:600;line-height:1.4;margin-bottom:1.5rem;color:var(--ink);}
-.contact-tagline em{font-style:normal;background:linear-gradient(135deg,var(--sakura),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.contact-body{font-size:.9rem;line-height:2;color:var(--muted);}
- 
-/* Contact cards */
-.contact-cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-.contact-card{
-  display:flex;align-items:center;gap:1rem;
-  text-decoration:none;color:var(--ink);
-  padding:1.2rem 1.4rem;
-  border-radius:18px;
-  background:white;
-  border:1.5px solid rgba(242,167,195,.2);
-  box-shadow:0 4px 20px rgba(107,63,160,.08);
-  transition:all .3s;
-  font-size:.82rem;
-}
-.contact-card:hover{transform:translateY(-4px);border-color:var(--sakura);box-shadow:0 12px 35px rgba(107,63,160,.18);color:var(--violet);}
-.cc-icon{
-  width:42px;height:42px;border-radius:12px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.1rem;font-weight:700;color:white;
-}
-.cc-instagram{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);}
-.cc-snapchat{background:#FFFC00;color:#000!important;}
-.cc-snapchat .cc-icon{background:#FFFC00;color:#000;}
-.cc-discord{background:#5865F2;}
-.cc-linkedin{background:#0077B5;}
-.cc-github{background:linear-gradient(135deg,#24292e,#586069);}
-.cc-location{background:linear-gradient(135deg,var(--sakura),var(--violet-l));}
-.cc-email{background:linear-gradient(135deg,var(--violet-l),var(--violet));}
-.cc-info{}
+
+/* ══ CONTACT ══ */
+.contact-layout-main{max-width:1100px;margin:0 auto;padding:4rem 3rem;display:grid;grid-template-columns:1.2fr 1fr;gap:5rem;align-items:start;}
+.contact-cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:3rem;}
+.contact-card{display:flex;align-items:center;gap:1rem;text-decoration:none;color:var(--ink);padding:1.2rem 1.4rem;border-radius:18px;background:white;border:1.5px solid rgba(242,167,195,.2);box-shadow:0 4px 20px rgba(107,63,160,.08);transition:all .3s;font-size:.82rem;cursor:none;}
+.contact-card:hover{transform:translateY(-4px) scale(1.02);border-color:var(--sakura);box-shadow:0 12px 35px rgba(107,63,160,.2);color:var(--violet);}
+.cc-icon{width:42px;height:42px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:white;}
 .cc-name{font-weight:700;font-size:.82rem;display:block;margin-bottom:.1rem;}
 .cc-handle{font-size:.72rem;color:var(--muted);}
- 
+.cc-instagram .cc-icon{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);}
+.cc-snapchat .cc-icon{background:#FFFC00;}
+.cc-snapchat .cc-icon{color:#000;}
+.cc-discord .cc-icon{background:#5865F2;}
+.cc-linkedin .cc-icon{background:#0077B5;}
+.cc-github .cc-icon{background:linear-gradient(135deg,#24292e,#586069);}
+.cc-email .cc-icon{background:linear-gradient(135deg,var(--violet-l),var(--violet));}
+.cc-location .cc-icon{background:linear-gradient(135deg,var(--sakura),var(--violet-l));}
+
 /* Form */
-.contact-form-section{background:var(--white);padding:4rem 3rem;}
-.contact-form-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;}
-.form-card{background:var(--soft);border-radius:28px;padding:2.5rem;border:1px solid rgba(242,167,195,.2);}
+.form-card{background:white;border-radius:28px;padding:2.5rem;box-shadow:0 10px 40px rgba(107,63,160,.1);border:1px solid rgba(242,167,195,.2);}
+.form-title{font-family:'Shippori Mincho',serif;font-size:1.4rem;font-weight:600;color:var(--ink);margin-bottom:1.8rem;}
 .form-group{margin-bottom:1.5rem;}
 .form-label{display:block;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;font-weight:700;}
-.form-input,.form-textarea{width:100%;padding:.85rem 1.2rem;background:white;border:1.5px solid rgba(242,167,195,.3);border-radius:14px;font-family:'Zen Kaku Gothic New',sans-serif;font-size:.93rem;color:var(--ink);outline:none;transition:border-color .3s;resize:none;}
-.form-input:focus,.form-textarea:focus{border-color:var(--sakura);}
+.form-input,.form-textarea{width:100%;padding:.85rem 1.2rem;background:var(--soft);border:1.5px solid rgba(242,167,195,.3);border-radius:14px;font-family:'Zen Kaku Gothic New',sans-serif;font-size:.93rem;color:var(--ink);outline:none;transition:border-color .3s,box-shadow .3s;resize:none;cursor:none;}
+.form-input:focus,.form-textarea:focus{border-color:var(--sakura);box-shadow:0 0 0 4px rgba(242,167,195,.15);}
 .form-textarea{min-height:120px;}
-.form-aside h3{font-family:'Shippori Mincho',serif;font-size:1.6rem;font-weight:600;color:var(--ink);margin-bottom:1rem;line-height:1.4;}
-.form-aside p{font-size:.88rem;line-height:1.9;color:var(--muted);margin-bottom:2rem;}
- 
-/* ═══════════════════════════════════
-   FOOTER
-═══════════════════════════════════ */
-footer{
-  background:linear-gradient(135deg,var(--violet),var(--violet-d));
-  padding:3rem;
-  position:relative;overflow:hidden;
-}
+
+/* ══ FOOTER ══ */
+footer{background:linear-gradient(135deg,var(--violet),var(--violet-d));padding:3rem;position:relative;overflow:hidden;}
 .footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2rem;align-items:center;position:relative;z-index:2;}
 .footer-logo{font-family:'Shippori Mincho',serif;font-size:1.5rem;color:white;font-weight:800;}
 .footer-logo span{color:var(--sakura);}
 .footer-center{text-align:center;font-family:'Shippori Mincho',serif;font-size:1.8rem;color:rgba(242,167,195,.25);}
 .footer-right{text-align:right;font-size:.72rem;color:rgba(255,255,255,.4);letter-spacing:.08em;line-height:1.8;}
 .footer-blob{position:absolute;width:300px;height:300px;top:-150px;right:-80px;background:linear-gradient(135deg,var(--sakura),var(--violet-l));border-radius:60% 40% 50% 50%/50% 60% 40% 50%;opacity:.08;}
- 
-/* ═══════════════════════════════════
-   MOBILE
-═══════════════════════════════════ */
+
+/* Scroll reveal */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-30px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(30px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
+.reveal-right.visible{opacity:1;transform:translateX(0);}
+
+/* Mobile */
 @media(max-width:768px){
   nav{padding:1rem 1.5rem;}
   .nav-links{gap:1rem;}
   .nav-links a{font-size:.68rem;}
   .hero-content{max-width:100%;padding:3rem 1.5rem;}
-  .hero-blob{width:100%;height:50%;top:auto;bottom:0;right:0;border-radius:60% 60% 0 0;}
-  .hero-illustration,.sakura-br-tr,.sakura-br-bl-flip{display:none;}
-  .band,.skills-hero-band,.contact-hero-band,.skills-content,.contact-form-section{padding:4rem 1.5rem;}
-  .band-intro-grid,.featured-grid,.about-grid,.contact-hero-grid,.contact-form-inner,.skills-hero-grid,.footer-inner{grid-template-columns:1fr;gap:2.5rem;}
+  .hero-blob{width:100%;height:50%;top:auto;bottom:0;border-radius:60% 60% 0 0;}
+  .hero-illustration,.sakura-br-tr{display:none;}
+  .band,.skills-content{padding:4rem 1.5rem;}
+  .band-intro-grid,.featured-grid,.about-grid,.ph-about,.ph-skills-wrap,.contact-layout-main{grid-template-columns:1fr;gap:2.5rem;}
+  .ph-skills-left{clip-path:none;}
   .projects-grid{grid-template-columns:1fr;}
   .skills-layout{grid-template-columns:1fr;gap:2.5rem;}
   .contact-cards-grid{grid-template-columns:1fr;}
-  .page-header{padding:3rem 1.5rem 2rem;min-height:160px;}
-  .page-content{padding:3rem 1.5rem;}
-  .ph-num{font-size:3rem;}
   .about-extras{grid-template-columns:1fr;}
-  .footer-right{text-align:left;}
-  .footer-center{display:none;}
+  .footer-inner{grid-template-columns:1fr;}
+  .footer-center,.footer-right{text-align:left;}
+  body{cursor:auto;}
+  #cursor-dot,#cursor-ring{display:none;}
 }
 </style>
 </head>
 <body>
- 
+
+<!-- CURSOR -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- INK OVERLAY -->
+<div id="ink-overlay"><div class="ink-circle" id="ink-circle"></div></div>
+
 <!-- NAV -->
 <nav>
   <div class="nav-logo" onclick="showPage('home')"><span class="nav-dot"></span> M.Holay</div>
   <ul class="nav-links">
-    <li><a onclick="showPage('about')">À propos</a></li>
-    <li><a onclick="showPage('projects')">Projets</a></li>
-    <li><a onclick="showPage('skills')">Compétences</a></li>
-    <li><a onclick="showPage('contact')">Contact</a></li>
+    <li><a onclick="showPage('about')" data-page="about">À propos</a></li>
+    <li><a onclick="showPage('projects')" data-page="projects">Projets</a></li>
+    <li><a onclick="showPage('skills')" data-page="skills">Compétences</a></li>
+    <li><a onclick="showPage('contact')" data-page="contact">Contact</a></li>
   </ul>
 </nav>
- 
-<!-- ══════════════ HOME ══════════════ -->
+
+<!-- ══════════ HOME ══════════ -->
 <section id="home" class="page active">
- 
-  <!-- HERO -->
   <div class="hero">
     <div class="hero-blob"></div>
- 
-    <!-- Fuji + Torii illustration -->
     <svg class="hero-illustration" viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
       <defs>
         <linearGradient id="fujiG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="25%" stop-color="#e8d0f8"/><stop offset="100%" stop-color="#6b3fa0"/></linearGradient>
         <linearGradient id="waterG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(242,167,195,.55)"/><stop offset="100%" stop-color="rgba(107,63,160,.35)"/></linearGradient>
       </defs>
-      <!-- Water -->
       <ellipse cx="300" cy="465" rx="320" ry="55" fill="url(#waterG)"/>
       <line x1="80" y1="460" x2="200" y2="460" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
       <line x1="230" y1="470" x2="380" y2="470" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
-      <line x1="390" y1="462" x2="510" y2="462" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
-      <!-- Fuji -->
       <path d="M120,420 L300,75 L480,420 Z" fill="url(#fujiG)"/>
       <path d="M252,125 L300,75 L348,125 L332,140 L268,140 Z" fill="white" opacity=".92"/>
       <path d="M300,75 L480,420 L360,420 Z" fill="rgba(107,63,160,.18)"/>
-      <!-- Torii -->
       <path d="M190,355 Q300,335 410,355" fill="none" stroke="#c0392b" stroke-width="10" stroke-linecap="round"/>
       <rect x="185" y="350" width="230" height="13" rx="4" fill="#c0392b"/>
       <rect x="200" y="374" width="200" height="8" rx="3" fill="#c0392b"/>
       <rect x="208" y="382" width="15" height="83" rx="4" fill="#c0392b"/>
       <rect x="377" y="382" width="15" height="83" rx="4" fill="#c0392b"/>
-      <!-- Reflection -->
-      <path d="M208,465 L218,495 M377,465 L387,495" stroke="rgba(192,57,43,.18)" stroke-width="7"/>
-      <!-- Clouds -->
       <ellipse cx="115" cy="185" rx="52" ry="20" fill="rgba(255,255,255,.45)"/>
       <ellipse cx="148" cy="178" rx="36" ry="18" fill="rgba(255,255,255,.55)"/>
       <ellipse cx="468" cy="205" rx="46" ry="18" fill="rgba(255,255,255,.4)"/>
-      <ellipse cx="496" cy="198" rx="30" ry="15" fill="rgba(255,255,255,.48)"/>
     </svg>
- 
-    <!-- Sakura branch top right -->
     <svg class="sakura-br-tr" viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
       <path d="M340,0 Q280,40 200,80 Q140,110 80,160 Q40,190 0,200" fill="none" stroke="#7a5230" stroke-width="5" stroke-linecap="round"/>
       <path d="M240,55 Q210,20 190,50" fill="none" stroke="#7a5230" stroke-width="3"/>
       <path d="M180,90 Q150,55 135,80" fill="none" stroke="#7a5230" stroke-width="3"/>
-      <path d="M280,30 Q310,10 295,40" fill="none" stroke="#7a5230" stroke-width="2.5"/>
-      <g transform="translate(190,48)"><circle r="8" fill="#fce4ef"/><circle cx="10" r="7" fill="#f2a7c3"/><circle cx="-8" cy="-6" r="7" fill="#fce4ef"/><circle cx="5" cy="-10" r="6" fill="#f2a7c3"/><circle cx="-3" cy="9" r="6" fill="#fbd5e4"/><circle cx="2" cy="-1" r="3" fill="#e8b86d"/></g>
-      <g transform="translate(135,78)"><circle r="8" fill="#f2a7c3"/><circle cx="9" r="7" fill="#fce4ef"/><circle cx="-7" cy="-7" r="7" fill="#f2a7c3"/><circle cx="4" cy="-11" r="6" fill="#fce4ef"/><circle cx="-2" cy="9" r="6" fill="#fbd5e4"/><circle cx="2" cy="-1" r="3" fill="#e8b86d"/></g>
-      <g transform="translate(295,38)"><circle r="7" fill="#fce4ef"/><circle cx="8" r="6" fill="#f2a7c3"/><circle cx="-6" cy="-6" r="6" fill="#fce4ef"/><circle cx="3" cy="-9" r="5" fill="#f2a7c3"/><circle cx="1" cy="-1" r="2.5" fill="#e8b86d"/></g>
-      <g transform="translate(75,155)"><circle r="7" fill="#fbd5e4"/><circle cx="8" r="6" fill="#f2a7c3"/><circle cx="-6" cy="-5" r="6" fill="#fce4ef"/><circle cx="3" cy="-9" r="5" fill="#f2a7c3"/><circle cx="1" cy="-1" r="2.5" fill="#e8b86d"/></g>
-      <ellipse cx="160" cy="130" rx="5" ry="7" fill="#f2a7c3" opacity=".7" transform="rotate(-30,160,130)"/>
-      <ellipse cx="220" cy="100" rx="4" ry="6" fill="#fce4ef" opacity=".6" transform="rotate(20,220,100)"/>
+      <g transform="translate(190,48)"><circle r="8" fill="#fce4ef"/><circle cx="10" r="7" fill="#f2a7c3"/><circle cx="-8" cy="-6" r="7" fill="#fce4ef"/><circle cx="5" cy="-10" r="6" fill="#f2a7c3"/><circle cx="2" cy="-1" r="3" fill="#e8b86d"/></g>
+      <g transform="translate(135,78)"><circle r="8" fill="#f2a7c3"/><circle cx="9" r="7" fill="#fce4ef"/><circle cx="-7" cy="-7" r="7" fill="#f2a7c3"/><circle cx="4" cy="-11" r="6" fill="#fce4ef"/><circle cx="2" cy="-1" r="3" fill="#e8b86d"/></g>
+      <g transform="translate(75,155)"><circle r="7" fill="#fbd5e4"/><circle cx="8" r="6" fill="#f2a7c3"/><circle cx="-6" cy="-5" r="6" fill="#fce4ef"/><circle cx="1" cy="-1" r="2.5" fill="#e8b86d"/></g>
     </svg>
- 
-    <!-- Sakura branch bottom left -->
-    <svg class="sakura-br-bl-flip" viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg" style="position:absolute;bottom:-3%;left:-2%;width:200px;pointer-events:none;z-index:5;">
+    <svg style="position:absolute;bottom:-3%;left:-2%;width:200px;pointer-events:none;z-index:5;animation:sway 7s ease-in-out infinite reverse;transform-origin:bottom left;" viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
       <path d="M0,160 Q60,120 120,80 Q170,50 220,0" fill="none" stroke="#7a5230" stroke-width="5" stroke-linecap="round"/>
       <path d="M80,110 Q50,80 70,60" fill="none" stroke="#7a5230" stroke-width="3"/>
-      <path d="M140,65 Q120,35 140,20" fill="none" stroke="#7a5230" stroke-width="3"/>
-      <g transform="translate(68,62)"><circle r="7" fill="#f2a7c3"/><circle cx="8" r="6" fill="#fce4ef"/><circle cx="-6" cy="-6" r="6" fill="#f2a7c3"/><circle cx="3" cy="-9" r="5" fill="#fce4ef"/><circle cx="1" cy="-1" r="2.5" fill="#e8b86d"/></g>
-      <g transform="translate(138,22)"><circle r="7" fill="#fce4ef"/><circle cx="8" r="6" fill="#f2a7c3"/><circle cx="-6" cy="-5" r="6" fill="#fce4ef"/><circle cx="3" cy="-9" r="5" fill="#f2a7c3"/><circle cx="1" cy="-1" r="2.5" fill="#e8b86d"/></g>
+      <g transform="translate(68,62)"><circle r="7" fill="#f2a7c3"/><circle cx="8" r="6" fill="#fce4ef"/><circle cx="-6" cy="-6" r="6" fill="#f2a7c3"/><circle cx="1" cy="-1" r="2.5" fill="#e8b86d"/></g>
     </svg>
- 
     <div class="hero-content">
       <div class="hero-badge">🌸 BUT Informatique · 3ème Année</div>
       <h1 class="hero-name">Marius<br><em>Holay</em></h1>
@@ -449,20 +450,18 @@ footer{
         <button class="btn btn-outline" onclick="showPage('contact')">Me contacter</button>
       </div>
     </div>
- 
     <div class="scroll-arrow" onclick="document.getElementById('band1').scrollIntoView({behavior:'smooth'})">
       Défiler
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
     </div>
   </div>
- 
-  <!-- BAND 1 — violet -->
+
   <div class="band band-violet" id="band1">
-    <div class="band-blob" style="width:400px;height:400px;top:-150px;right:-80px;background:linear-gradient(135deg,var(--sakura),var(--violet-l));opacity:.15;animation:blobmorph 10s ease-in-out infinite;"></div>
+    <div class="band-blob" style="width:400px;height:400px;top:-150px;right:-80px;background:linear-gradient(135deg,var(--sakura),var(--violet-l));"></div>
     <div class="band-inner">
       <div class="band-intro-grid">
-        <div class="band-quote">Étudiant en <em>BUT Informatique</em>, je conçois des solutions numériques alliant technique rigoureuse et sens du détail esthétique.</div>
-        <div class="band-stats">
+        <div class="band-quote reveal-left">Étudiant en <em>BUT Informatique</em>, je conçois des solutions numériques alliant technique rigoureuse et sens du détail esthétique.</div>
+        <div class="band-stats reveal-right">
           <div class="bstat"><div class="bstat-num">3<span>ème</span></div><div class="bstat-label">Année de formation</div></div>
           <div class="bstat"><div class="bstat-num">6<span>+</span></div><div class="bstat-label">Projets réalisés</div></div>
           <div class="bstat"><div class="bstat-num">5<span>+</span></div><div class="bstat-label">Langages maîtrisés</div></div>
@@ -470,36 +469,28 @@ footer{
       </div>
     </div>
   </div>
- 
-  <!-- BAND 2 — skills -->
+
   <div class="band band-white">
-    <div class="band-blob" style="width:300px;height:300px;bottom:-100px;left:-60px;background:linear-gradient(135deg,var(--sakura-l),var(--violet-ll));opacity:.5;animation:blobmorph 12s ease-in-out infinite reverse;"></div>
+    <div class="band-blob" style="width:300px;height:300px;bottom:-100px;left:-60px;background:linear-gradient(135deg,var(--sakura-l),var(--violet-ll));opacity:.4;"></div>
     <div class="band-inner">
-      <div class="band-label">Compétences clés</div>
-      <div class="pills">
-        <span class="pill pill-filled">Python</span>
-        <span class="pill pill-filled">JavaScript</span>
-        <span class="pill pill-outline">HTML / CSS</span>
-        <span class="pill pill-outline">SQL</span>
-        <span class="pill pill-outline">PHP</span>
-        <span class="pill pill-outline">Java</span>
-        <span class="pill pill-outline">Git</span>
-        <span class="pill pill-outline">Linux</span>
-        <span class="pill pill-outline">Docker</span>
-        <span class="pill pill-outline">Node.js</span>
-        <span class="pill pill-outline">Algorithmique</span>
-        <span class="pill pill-outline">Base de données</span>
+      <div class="band-label reveal">Compétences clés</div>
+      <div class="pills reveal">
+        <span class="pill pill-filled">Python</span><span class="pill pill-filled">JavaScript</span>
+        <span class="pill pill-outline">HTML / CSS</span><span class="pill pill-outline">SQL</span>
+        <span class="pill pill-outline">PHP</span><span class="pill pill-outline">Java</span>
+        <span class="pill pill-outline">Git</span><span class="pill pill-outline">Linux</span>
+        <span class="pill pill-outline">Docker</span><span class="pill pill-outline">Node.js</span>
+        <span class="pill pill-outline">Algorithmique</span><span class="pill pill-outline">Base de données</span>
       </div>
     </div>
   </div>
- 
-  <!-- BAND 3 — featured -->
+
   <div class="band band-gradient">
-    <div class="band-blob" style="width:350px;height:350px;top:-100px;right:-60px;background:linear-gradient(135deg,var(--violet-l),var(--sakura));opacity:.2;animation:blobmorph 9s ease-in-out infinite;"></div>
+    <div class="band-blob" style="width:350px;height:350px;top:-100px;right:-60px;background:linear-gradient(135deg,var(--violet-l),var(--sakura));opacity:.2;"></div>
     <div class="band-inner">
-      <div class="band-label">Projet en vedette</div>
+      <div class="band-label reveal">Projet en vedette</div>
       <div class="featured-grid">
-        <div class="featured-card">
+        <div class="featured-card reveal-left">
           <div class="featured-card-img fci-1">技</div>
           <div class="featured-card-body">
             <div class="featured-tag">Projet phare</div>
@@ -508,71 +499,62 @@ footer{
             <div class="tech-chips"><span class="tc">HTML</span><span class="tc">CSS</span><span class="tc">JS</span><span class="tc">MySQL</span></div>
           </div>
         </div>
-        <div class="featured-text">
+        <div class="featured-text reveal-right">
           <h3>Des solutions pensées de bout en bout</h3>
-          <p>En 3ème année de BUT Informatique, j'ai développé des projets complets qui illustrent ma capacité à concevoir, coder et déployer des applications robustes et élégantes.</p>
+          <p>En 3ème année de BUT Informatique, j'ai développé des projets complets illustrant ma capacité à concevoir, coder et déployer des applications robustes et élégantes.</p>
           <button class="btn btn-primary" onclick="showPage('projects')">Voir tous les projets →</button>
         </div>
       </div>
     </div>
   </div>
- 
-  <!-- BAND 4 — CTA -->
+
   <div class="band band-violet">
-    <div class="band-blob" style="width:400px;height:400px;bottom:-150px;left:-80px;background:linear-gradient(135deg,var(--sakura),var(--violet-l));opacity:.15;animation:blobmorph 11s ease-in-out infinite reverse;"></div>
-    <div class="band-inner cta-center">
+    <div class="band-blob" style="width:400px;height:400px;bottom:-150px;left:-80px;background:linear-gradient(135deg,var(--sakura),var(--violet-l));opacity:.15;animation-direction:reverse;"></div>
+    <div class="band-inner cta-center reveal">
       <svg width="180" height="70" viewBox="0 0 180 70" xmlns="http://www.w3.org/2000/svg" style="margin:0 auto 1.5rem;display:block;opacity:.5;">
         <path d="M10,55 Q70,20 170,30" fill="none" stroke="#7a5230" stroke-width="2.5"/>
         <path d="M60,38 Q78,12 95,30" fill="none" stroke="#7a5230" stroke-width="1.5"/>
-        <path d="M115,32 Q132,8 148,28" fill="none" stroke="#7a5230" stroke-width="1.5"/>
-        <g transform="translate(93,28)"><circle r="6" fill="#f2a7c3"/><circle cx="7" r="5" fill="#fce4ef"/><circle cx="-5" cy="-5" r="5" fill="#f2a7c3"/><circle cx="2" cy="-8" r="4" fill="#fce4ef"/><circle cx="1" cy="-1" r="2" fill="#e8b86d"/></g>
-        <g transform="translate(146,26)"><circle r="6" fill="#fce4ef"/><circle cx="7" r="5" fill="#f2a7c3"/><circle cx="-5" cy="-5" r="5" fill="#fce4ef"/><circle cx="2" cy="-8" r="4" fill="#f2a7c3"/><circle cx="1" cy="-1" r="2" fill="#e8b86d"/></g>
+        <g transform="translate(93,28)"><circle r="6" fill="#f2a7c3"/><circle cx="7" r="5" fill="#fce4ef"/><circle cx="-5" cy="-5" r="5" fill="#f2a7c3"/><circle cx="1" cy="-1" r="2" fill="#e8b86d"/></g>
+        <g transform="translate(146,26)"><circle r="6" fill="#fce4ef"/><circle cx="7" r="5" fill="#f2a7c3"/><circle cx="1" cy="-1" r="2" fill="#e8b86d"/></g>
       </svg>
-      <div class="cta-kanji" style="-webkit-text-fill-color:rgba(242,167,195,.3);background:none;">縁</div>
-      <h3 class="cta-title" style="color:white;">Travaillons ensemble</h3>
-      <p class="cta-sub" style="color:rgba(255,255,255,.6);">Une idée, un projet, une opportunité de stage ?<br>Je suis disponible et à l'écoute.</p>
+      <div class="cta-kanji">縁</div>
+      <h3 class="cta-title">Travaillons ensemble</h3>
+      <p class="cta-sub">Une idée, un projet, une opportunité de stage ?<br>Je suis disponible et à l'écoute.</p>
       <button class="btn" style="background:white;color:var(--violet);" onclick="showPage('contact')">Prendre contact</button>
     </div>
   </div>
- 
 </section>
- 
-<!-- ══════════════ À PROPOS ══════════════ -->
+
+<!-- ══════════ À PROPOS ══════════ -->
 <section id="about" class="page">
-  <div class="page-header">
-    <div class="ph-blob1"></div><div class="ph-blob2"></div>
-    <!-- Pagoda illustration -->
-    <svg class="ph-illus" viewBox="0 0 120 280" xmlns="http://www.w3.org/2000/svg" fill="var(--violet)">
-      <rect x="55" y="0" width="10" height="32"/><circle cx="60" cy="5" r="5"/>
-      <polygon points="18,52 102,52 112,70 8,70"/><rect x="28" y="70" width="64" height="22"/>
-      <polygon points="10,92 110,92 120,110 0,110"/><rect x="20" y="110" width="80" height="28"/>
-      <polygon points="4,138 116,138 124,157 -4,157"/><rect x="12" y="157" width="96" height="32"/>
-      <polygon points="0,189 120,189 126,208 -6,208"/><rect x="8" y="208" width="104" height="72"/>
-      <rect x="22" y="224" width="15" height="46"/><rect x="52" y="224" width="15" height="46"/><rect x="82" y="224" width="15" height="46"/>
-    </svg>
-    <div class="ph-inner">
-      <div class="ph-num">01</div>
-      <div><div class="ph-eyebrow">自己紹介 — Présentation</div><h2 class="ph-title">À propos de moi</h2></div>
+  <div style="background:linear-gradient(135deg,var(--sakura-ll) 0%,var(--violet-ll) 100%);position:relative;overflow:hidden;">
+    <div style="position:absolute;width:400px;height:400px;top:-150px;right:-80px;background:linear-gradient(135deg,var(--sakura),var(--violet-l));border-radius:60% 40% 50% 50%/50% 60% 40% 50%;opacity:.18;animation:blobmorph 10s ease-in-out infinite;"></div>
+    <div style="position:absolute;width:200px;height:200px;bottom:-80px;left:5%;background:linear-gradient(135deg,var(--violet-l),var(--sakura));border-radius:40% 60% 50% 50%/60% 40% 60% 40%;opacity:.12;animation:blobmorph 12s ease-in-out infinite reverse;"></div>
+    <div class="ph-about">
+      <div class="ph-about-left reveal-left">
+        <div class="ph-about-eyebrow">自己紹介 — Présentation</div>
+        <h2 class="ph-about-title">À propos<br>de <em>moi</em></h2>
+        <p class="ph-about-sub">Développeur passionné basé à Aulnoye-Aymeries, en 3ème année de BUT Informatique.</p>
+      </div>
+      <svg viewBox="0 0 280 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:260px;margin:0 auto;display:block;opacity:.6;" class="reveal-right">
+        <rect x="55" y="0" width="10" height="32"/><circle cx="60" cy="5" r="5" fill="var(--violet)"/>
+        <polygon points="18,52 102,52 112,70 8,70" fill="var(--violet)"/><rect x="28" y="70" width="64" height="22" fill="var(--violet)"/>
+        <polygon points="10,92 110,92 120,110 0,110" fill="var(--violet)"/><rect x="20" y="110" width="80" height="28" fill="var(--violet)"/>
+        <polygon points="4,138 116,138 124,157 -4,157" fill="var(--violet)"/><rect x="12" y="157" width="96" height="32" fill="var(--violet)"/>
+        <polygon points="0,189 120,189 126,208 -6,208" fill="var(--violet)"/><rect x="8" y="208" width="104" height="72" fill="var(--violet)"/>
+        <rect x="22" y="224" width="15" height="46" fill="var(--violet)"/><rect x="52" y="224" width="15" height="46" fill="var(--violet)"/><rect x="82" y="224" width="15" height="46" fill="var(--violet)"/>
+      </svg>
     </div>
   </div>
   <div class="page-content">
     <div class="about-grid">
-      <div class="portrait-wrap">
+      <div class="portrait-wrap reveal-left">
         <div class="portrait-deco"></div><div class="portrait-deco2"></div>
         <div class="portrait-box">
-          <!-- Sakura deco inside portrait -->
-          <svg class="portrait-sakura" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
-            <path d="M120,0 Q80,30 50,70 Q30,90 0,100" fill="none" stroke="#7a5230" stroke-width="3"/>
-            <path d="M75,35 Q55,10 45,35" fill="none" stroke="#7a5230" stroke-width="2"/>
-            <g transform="translate(44,33)"><circle r="6" fill="#fce4ef"/><circle cx="7" r="5" fill="#f2a7c3"/><circle cx="-5" cy="-5" r="5" fill="#fce4ef"/><circle cx="2" cy="-8" r="4" fill="#f2a7c3"/><circle cx="1" cy="-1" r="2" fill="#e8b86d"/></g>
-          </svg>
-          <div class="portrait-placeholder">
-            <div class="portrait-kanji">人</div>
-            <div class="portrait-hint">Votre photo</div>
-          </div>
+          <img src="photo.jpg" alt="Marius Holay" style="width:100%;height:100%;object-fit:cover;object-position:top;">
         </div>
       </div>
-      <div>
+      <div class="reveal-right">
         <div class="about-tag">🌸 BUT Informatique · 3ème Année</div>
         <p class="about-intro">Étudiant en BUT Informatique, passionné par la création de solutions élégantes à des problèmes complexes.</p>
         <p class="about-body">Actuellement en 3ème année de BUT Informatique à Aulnoye-Aymeries, je me spécialise dans le développement web et la conception de systèmes d'information. J'aime apprendre de nouvelles technologies et relever des défis techniques ambitieux.<br><br>En dehors du code, je suis attiré par le design, la culture japonaise et la façon dont l'esthétique peut s'allier à la fonctionnalité pour créer des expériences mémorables.</p>
@@ -583,94 +565,68 @@ footer{
         </div>
       </div>
     </div>
-    <!-- Extra cards -->
     <div class="about-extras">
-      <div class="about-extra-card">
-        <span class="aec-icon">💻</span>
-        <h3 class="aec-title">Développement web</h3>
-        <p class="aec-body">Passionné par la création d'interfaces modernes et fonctionnelles, j'aime concevoir des expériences utilisateur soignées du front au back-end.</p>
-      </div>
-      <div class="about-extra-card">
-        <span class="aec-icon">🎨</span>
-        <h3 class="aec-title">Design & esthétique</h3>
-        <p class="aec-body">Convaincu que le code et le design vont de pair, j'accorde une grande importance à l'esthétique et à l'expérience visuelle de mes projets.</p>
-      </div>
+      <div class="about-extra-card reveal-left"><span class="aec-icon">💻</span><h3 class="aec-title">Développement web</h3><p class="aec-body">Passionné par la création d'interfaces modernes et fonctionnelles, j'aime concevoir des expériences utilisateur soignées du front au back-end.</p></div>
+      <div class="about-extra-card reveal-right"><span class="aec-icon">🎨</span><h3 class="aec-title">Design & esthétique</h3><p class="aec-body">Convaincu que le code et le design vont de pair, j'accorde une grande importance à l'esthétique et à l'expérience visuelle de mes projets.</p></div>
     </div>
   </div>
 </section>
- 
-<!-- ══════════════ PROJETS ══════════════ -->
+
+<!-- ══════════ PROJETS ══════════ -->
 <section id="projects" class="page">
-  <div class="page-header">
-    <div class="ph-blob1"></div><div class="ph-blob2"></div>
-    <!-- Torii illustration -->
-    <svg class="ph-illus" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
-      <path d="M20,70 Q100,40 180,70" stroke="var(--violet)" stroke-width="10" stroke-linecap="round"/>
-      <rect x="15" y="65" width="170" height="14" rx="4" fill="var(--violet)"/>
-      <rect x="28" y="90" width="144" height="8" rx="3" fill="var(--violet)"/>
-      <rect x="36" y="98" width="12" height="102" rx="4" fill="var(--violet)"/>
-      <rect x="152" y="98" width="12" height="102" rx="4" fill="var(--violet)"/>
-    </svg>
-    <div class="ph-inner">
-      <div class="ph-num">02</div>
-      <div><div class="ph-eyebrow">プロジェクト — Réalisations</div><h2 class="ph-title">Mes projets</h2></div>
+  <div style="background:linear-gradient(135deg,var(--sakura-ll) 0%,var(--violet-ll) 100%);position:relative;overflow:hidden;padding-bottom:3rem;">
+    <div style="position:absolute;width:350px;height:350px;top:-100px;right:-60px;background:linear-gradient(135deg,var(--sakura),var(--violet-l));border-radius:60% 40% 50% 50%/50% 60% 40% 50%;opacity:.2;animation:blobmorph 9s ease-in-out infinite;"></div>
+    <div class="ph-projects-wrap reveal">
+      <div class="ph-projects-num">02</div>
+      <div class="ph-projects-eyebrow">プロジェクト — Réalisations</div>
+      <h2 class="ph-projects-title">Mes projets</h2>
     </div>
+    <svg class="ph-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,0 C360,60 1080,0 1440,40 L1440,60 L0,60 Z" fill="var(--soft)"/></svg>
   </div>
   <div class="page-content">
-    <div class="projects-intro">
-      <p>Des projets réalisés dans le cadre de ma formation en BUT Informatique, illustrant mes compétences techniques et créatives.</p>
-    </div>
     <div class="projects-grid">
-      <div class="project-card"><div class="project-card-top pct1">技</div><div class="project-card-body"><div class="project-num-tag">Projet 01</div><h3 class="project-title">Application Web</h3><p class="project-desc">Application full-stack avec authentification utilisateur, base de données et interface responsive.</p><div class="project-chips"><span class="pchip">HTML</span><span class="pchip">CSS</span><span class="pchip">JS</span><span class="pchip">MySQL</span></div></div></div>
-      <div class="project-card"><div class="project-card-top pct2">力</div><div class="project-card-body"><div class="project-num-tag">Projet 02</div><h3 class="project-title">Jeu en Python</h3><p class="project-desc">Jeu textuel avec système de niveaux, gestion des scores et interface colorée en terminal.</p><div class="project-chips"><span class="pchip">Python</span><span class="pchip">POO</span><span class="pchip">Algo</span></div></div></div>
-      <div class="project-card"><div class="project-card-top pct3">道</div><div class="project-card-body"><div class="project-num-tag">Projet 03</div><h3 class="project-title">API REST</h3><p class="project-desc">API REST complète avec endpoints CRUD, documentation et tests unitaires.</p><div class="project-chips"><span class="pchip">Node.js</span><span class="pchip">Express</span><span class="pchip">JSON</span></div></div></div>
-      <div class="project-card"><div class="project-card-top pct4">学</div><div class="project-card-body"><div class="project-num-tag">Projet 04</div><h3 class="project-title">Base de données</h3><p class="project-desc">Conception et implémentation d'une base de données relationnelle avec requêtes optimisées.</p><div class="project-chips"><span class="pchip">SQL</span><span class="pchip">PostgreSQL</span><span class="pchip">MCD</span></div></div></div>
-      <div class="project-card"><div class="project-card-top pct5">創</div><div class="project-card-body"><div class="project-num-tag">Projet 05</div><h3 class="project-title">Site E-commerce</h3><p class="project-desc">Interface de boutique en ligne avec panier, filtres de produits et design adaptatif.</p><div class="project-chips"><span class="pchip">HTML</span><span class="pchip">CSS</span><span class="pchip">JS</span><span class="pchip">PHP</span></div></div></div>
-      <div class="project-card"><div class="project-card-top pct6">心</div><div class="project-card-body"><div class="project-num-tag">Projet 06</div><h3 class="project-title">Script d'automatisation</h3><p class="project-desc">Script Python pour automatiser des tâches, traitement de fichiers et génération de rapports.</p><div class="project-chips"><span class="pchip">Python</span><span class="pchip">Pandas</span><span class="pchip">Auto</span></div></div></div>
+      <div class="project-card reveal"><div class="project-card-top pct1">技</div><div class="project-card-body"><div class="project-num-tag">Projet 01</div><h3 class="project-title">Application Web</h3><p class="project-desc">Application full-stack avec authentification utilisateur, base de données et interface responsive.</p><div class="project-chips"><span class="pchip">HTML</span><span class="pchip">CSS</span><span class="pchip">JS</span><span class="pchip">MySQL</span></div></div></div>
+      <div class="project-card reveal" style="transition-delay:.1s"><div class="project-card-top pct2">力</div><div class="project-card-body"><div class="project-num-tag">Projet 02</div><h3 class="project-title">Jeu en Python</h3><p class="project-desc">Jeu textuel avec système de niveaux, gestion des scores et interface colorée en terminal.</p><div class="project-chips"><span class="pchip">Python</span><span class="pchip">POO</span><span class="pchip">Algo</span></div></div></div>
+      <div class="project-card reveal" style="transition-delay:.2s"><div class="project-card-top pct3">道</div><div class="project-card-body"><div class="project-num-tag">Projet 03</div><h3 class="project-title">API REST</h3><p class="project-desc">API REST complète avec endpoints CRUD, documentation et tests unitaires.</p><div class="project-chips"><span class="pchip">Node.js</span><span class="pchip">Express</span><span class="pchip">JSON</span></div></div></div>
+      <div class="project-card reveal" style="transition-delay:.3s"><div class="project-card-top pct4">学</div><div class="project-card-body"><div class="project-num-tag">Projet 04</div><h3 class="project-title">Base de données</h3><p class="project-desc">Conception et implémentation d'une base de données relationnelle avec requêtes optimisées.</p><div class="project-chips"><span class="pchip">SQL</span><span class="pchip">PostgreSQL</span><span class="pchip">MCD</span></div></div></div>
+      <div class="project-card reveal" style="transition-delay:.4s"><div class="project-card-top pct5">創</div><div class="project-card-body"><div class="project-num-tag">Projet 05</div><h3 class="project-title">Site E-commerce</h3><p class="project-desc">Interface de boutique en ligne avec panier, filtres de produits et design adaptatif.</p><div class="project-chips"><span class="pchip">HTML</span><span class="pchip">CSS</span><span class="pchip">JS</span><span class="pchip">PHP</span></div></div></div>
+      <div class="project-card reveal" style="transition-delay:.5s"><div class="project-card-top pct6">心</div><div class="project-card-body"><div class="project-num-tag">Projet 06</div><h3 class="project-title">Script d'automatisation</h3><p class="project-desc">Script Python pour automatiser des tâches, traitement de fichiers et génération de rapports.</p><div class="project-chips"><span class="pchip">Python</span><span class="pchip">Pandas</span><span class="pchip">Auto</span></div></div></div>
     </div>
   </div>
 </section>
- 
-<!-- ══════════════ COMPÉTENCES ══════════════ -->
+
+<!-- ══════════ COMPÉTENCES ══════════ -->
 <section id="skills" class="page">
-  <!-- Hero band -->
-  <div class="skills-hero-band">
-    <div class="skills-blob"></div>
-    <div class="band-blob" style="width:200px;height:200px;bottom:-80px;left:5%;background:linear-gradient(135deg,var(--sakura),var(--violet-l));opacity:.15;animation:blobmorph 11s ease-in-out infinite reverse;border-radius:60% 40% 50% 50%/50% 60% 40% 50%;position:absolute;"></div>
-    <div class="skills-hero-inner">
-      <div class="skills-hero-grid">
-        <div class="skills-hero-text">
-          <h3>Mes outils &amp; savoir-faire</h3>
-          <p>En 3ème année de BUT Informatique, j'ai acquis une palette de compétences techniques variées, de la programmation à la gestion de bases de données, en passant par les outils de développement modernes.</p>
-        </div>
-        <!-- Fuji mini illustration -->
-        <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;margin:0 auto;display:block;">
-          <path d="M50,180 L150,40 L250,180 Z" fill="rgba(255,255,255,.1)"/>
-          <path d="M125,65 L150,40 L175,65 L165,75 L135,75 Z" fill="rgba(255,255,255,.5)"/>
-          <path d="M150,40 L250,180 L190,180 Z" fill="rgba(255,255,255,.06)"/>
-          <ellipse cx="150" cy="185" rx="130" ry="25" fill="rgba(242,167,195,.2)"/>
-          <!-- Mini torii -->
-          <path d="M110,158 Q150,148 190,158" fill="none" stroke="rgba(192,57,43,.6)" stroke-width="5" stroke-linecap="round"/>
-          <rect x="107" y="155" width="86" height="6" rx="2" fill="rgba(192,57,43,.6)"/>
-          <rect x="114" y="161" width="12" height="30" rx="3" fill="rgba(192,57,43,.6)"/>
-          <rect x="174" y="161" width="12" height="30" rx="3" fill="rgba(192,57,43,.6)"/>
-          <!-- Clouds -->
-          <ellipse cx="60" cy="90" rx="28" ry="11" fill="rgba(255,255,255,.2)"/>
-          <ellipse cx="240" cy="100" rx="24" ry="10" fill="rgba(255,255,255,.18)"/>
-        </svg>
-      </div>
+  <div class="ph-skills-wrap">
+    <div class="ph-skills-left">
+      <div style="position:absolute;width:250px;height:250px;top:-80px;right:-60px;background:linear-gradient(135deg,var(--sakura),var(--violet-l));border-radius:60% 40% 50% 50%/50% 60% 40% 50%;opacity:.2;animation:blobmorph 8s ease-in-out infinite;"></div>
+      <div class="ph-skills-eyebrow reveal-left">スキル — Savoir-faire</div>
+      <h2 class="ph-skills-title reveal-left">Mes<br>compétences</h2>
+    </div>
+    <div class="ph-skills-right">
+      <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:260px;" class="reveal-right">
+        <path d="M50,180 L150,40 L250,180 Z" fill="rgba(107,63,160,.12)"/>
+        <path d="M125,65 L150,40 L175,65 L165,75 L135,75 Z" fill="rgba(242,167,195,.6)"/>
+        <path d="M150,40 L250,180 L190,180 Z" fill="rgba(107,63,160,.06)"/>
+        <ellipse cx="150" cy="185" rx="130" ry="22" fill="rgba(242,167,195,.2)"/>
+        <path d="M110,158 Q150,148 190,158" fill="none" stroke="rgba(192,57,43,.5)" stroke-width="5" stroke-linecap="round"/>
+        <rect x="107" y="155" width="86" height="6" rx="2" fill="rgba(192,57,43,.5)"/>
+        <rect x="114" y="161" width="12" height="28" rx="3" fill="rgba(192,57,43,.5)"/>
+        <rect x="174" y="161" width="12" height="28" rx="3" fill="rgba(192,57,43,.5)"/>
+        <ellipse cx="60" cy="90" rx="28" ry="11" fill="rgba(107,63,160,.12)"/>
+        <ellipse cx="240" cy="100" rx="24" ry="10" fill="rgba(107,63,160,.1)"/>
+      </svg>
     </div>
   </div>
- 
   <div class="skills-content">
     <div class="skills-content-inner">
       <div class="skills-layout">
-        <div>
+        <div class="reveal-left">
           <div class="skill-cat"><div class="skill-cat-label">Langages</div><div class="skill-tags"><span class="stag">Python</span><span class="stag">JavaScript</span><span class="stag">HTML5</span><span class="stag">CSS3</span><span class="stag">SQL</span><span class="stag">PHP</span><span class="stag">Java</span><span class="stag">C</span></div></div>
           <div class="skill-cat"><div class="skill-cat-label">Outils</div><div class="skill-tags"><span class="stag">Git</span><span class="stag">GitHub</span><span class="stag">VS Code</span><span class="stag">Linux</span><span class="stag">Docker</span></div></div>
           <div class="skill-cat"><div class="skill-cat-label">Domaines</div><div class="skill-tags"><span class="stag">Web Dev</span><span class="stag">Algorithmique</span><span class="stag">Base de données</span><span class="stag">POO</span><span class="stag">Réseaux</span></div></div>
         </div>
-        <div id="skillsMain">
+        <div id="skillsMain" class="reveal-right">
           <div class="skill-bar-item"><div class="skill-bar-header"><span class="skill-bar-name">HTML / CSS</span><span class="skill-bar-pct">85%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" style="width:85%"></div></div></div>
           <div class="skill-bar-item"><div class="skill-bar-header"><span class="skill-bar-name">Python</span><span class="skill-bar-pct">78%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" style="width:78%"></div></div></div>
           <div class="skill-bar-item"><div class="skill-bar-header"><span class="skill-bar-name">JavaScript</span><span class="skill-bar-pct">70%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" style="width:70%"></div></div></div>
@@ -682,100 +638,45 @@ footer{
     </div>
   </div>
 </section>
- 
-<!-- ══════════════ CONTACT ══════════════ -->
+
+<!-- ══════════ CONTACT ══════════ -->
 <section id="contact" class="page">
-  <!-- Hero contact band -->
-  <div class="contact-hero-band">
-    <div class="ch-blob1"></div><div class="ch-blob2"></div>
-    <div class="contact-hero-inner">
-      <div class="contact-hero-grid">
-        <div>
-          <div class="about-tag" style="margin-bottom:1.5rem;">🌸 Restons en contact</div>
-          <h3 class="contact-tagline">Travaillons ensemble sur votre <em>prochain projet.</em></h3>
-          <p class="contact-body">Vous avez un projet en tête ? Une question ou une opportunité de stage ? Retrouvez-moi sur mes réseaux ou envoyez-moi un message directement !</p>
-        </div>
-        <!-- Sakura branch illus -->
-        <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:260px;margin:0 auto;display:block;opacity:.7;">
-          <path d="M10,180 Q80,120 160,60 Q210,25 270,0" fill="none" stroke="#7a5230" stroke-width="5" stroke-linecap="round"/>
-          <path d="M100,120 Q70,80 90,55" fill="none" stroke="#7a5230" stroke-width="3"/>
-          <path d="M175,65 Q155,30 175,15" fill="none" stroke="#7a5230" stroke-width="3"/>
-          <path d="M55,155 Q35,125 55,110" fill="none" stroke="#7a5230" stroke-width="2.5"/>
-          <g transform="translate(88,57)"><circle r="8" fill="#f2a7c3"/><circle cx="9" r="7" fill="#fce4ef"/><circle cx="-7" cy="-7" r="7" fill="#f2a7c3"/><circle cx="4" cy="-11" r="6" fill="#fce4ef"/><circle cx="-2" cy="9" r="6" fill="#fbd5e4"/><circle cx="2" cy="-1" r="3" fill="#e8b86d"/></g>
-          <g transform="translate(173,17)"><circle r="7" fill="#fce4ef"/><circle cx="8" r="6" fill="#f2a7c3"/><circle cx="-6" cy="-6" r="6" fill="#fce4ef"/><circle cx="3" cy="-9" r="5" fill="#f2a7c3"/><circle cx="1" cy="-1" r="2.5" fill="#e8b86d"/></g>
-          <g transform="translate(53,112)"><circle r="7" fill="#f2a7c3"/><circle cx="8" r="6" fill="#fce4ef"/><circle cx="-6" cy="-6" r="6" fill="#f2a7c3"/><circle cx="3" cy="-9" r="5" fill="#fce4ef"/><circle cx="1" cy="-1" r="2.5" fill="#e8b86d"/></g>
-          <ellipse cx="130" cy="90" rx="5" ry="7" fill="#f2a7c3" opacity=".7" transform="rotate(-30,130,90)"/>
-          <ellipse cx="210" cy="50" rx="4" ry="6" fill="#fce4ef" opacity=".6" transform="rotate(20,210,50)"/>
-          <ellipse cx="40" cy="140" rx="4" ry="5" fill="#fbd5e4" opacity=".7" transform="rotate(-10,40,140)"/>
-        </svg>
-      </div>
- 
-      <!-- Contact cards grid -->
-      <div style="margin-top:3rem;">
-        <div class="band-label">Mes réseaux</div>
-        <div class="contact-cards-grid">
-          <a class="contact-card cc-email" href="mailto:marius.holay10@gmail.com">
-            <div class="cc-icon" style="background:linear-gradient(135deg,var(--violet-l),var(--violet));">✉</div>
-            <div class="cc-info"><span class="cc-name">Email</span><span class="cc-handle">marius.holay10@gmail.com</span></div>
-          </a>
-          <a class="contact-card cc-instagram" href="https://instagram.com/h_marius_" target="_blank">
-            <div class="cc-icon cc-instagram">📷</div>
-            <div class="cc-info"><span class="cc-name">Instagram</span><span class="cc-handle">@h_marius_</span></div>
-          </a>
-          <a class="contact-card cc-snapchat" href="#" target="_blank">
-            <div class="cc-icon" style="background:#FFFC00;font-size:1.1rem;">👻</div>
-            <div class="cc-info"><span class="cc-name" style="color:var(--ink);">Snapchat</span><span class="cc-handle">h_marius_</span></div>
-          </a>
-          <a class="contact-card cc-discord" href="#" target="_blank">
-            <div class="cc-icon cc-discord">🎮</div>
-            <div class="cc-info"><span class="cc-name">Discord</span><span class="cc-handle">Kashh__ #8789</span></div>
-          </a>
-          <a class="contact-card cc-linkedin" href="https://linkedin.com/in/mariusholay" target="_blank">
-            <div class="cc-icon cc-linkedin">in</div>
-            <div class="cc-info"><span class="cc-name">LinkedIn</span><span class="cc-handle">linkedin.com/in/mariusholay</span></div>
-          </a>
-          <a class="contact-card cc-github" href="https://github.com/Mariusholay10-UX" target="_blank">
-            <div class="cc-icon" style="background:linear-gradient(135deg,#24292e,#586069);">⌥</div>
-            <div class="cc-info"><span class="cc-name">GitHub</span><span class="cc-handle">Mariusholay10-UX</span></div>
-          </a>
-          <a class="contact-card cc-location" href="#" style="grid-column:1/-1;">
-            <div class="cc-icon" style="background:linear-gradient(135deg,var(--sakura),var(--violet-l));">📍</div>
-            <div class="cc-info"><span class="cc-name">Localisation</span><span class="cc-handle">Aulnoye-Aymeries, France</span></div>
-          </a>
-        </div>
+  <div class="ph-contact-wrap">
+    <div class="ph-contact-blob1"></div><div class="ph-contact-blob2"></div>
+    <svg style="position:absolute;top:1rem;right:3rem;width:200px;opacity:.4;pointer-events:none;" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10,130 Q80,80 140,40 Q170,20 200,0" fill="none" stroke="#7a5230" stroke-width="4" stroke-linecap="round"/>
+      <path d="M80,90 Q58,60 76,42" fill="none" stroke="#7a5230" stroke-width="2.5"/>
+      <g transform="translate(74,44)"><circle r="7" fill="#f2a7c3"/><circle cx="8" r="6" fill="#fce4ef"/><circle cx="-6" cy="-6" r="6" fill="#f2a7c3"/><circle cx="1" cy="-1" r="2.5" fill="#e8b86d"/></g>
+      <g transform="translate(138,42)"><circle r="6" fill="#fce4ef"/><circle cx="7" r="5" fill="#f2a7c3"/><circle cx="1" cy="-1" r="2" fill="#e8b86d"/></g>
+    </svg>
+    <div class="ph-contact-eyebrow reveal">連絡 — Communication</div>
+    <h2 class="ph-contact-title reveal">Restons en contact</h2>
+    <p class="ph-contact-sub reveal">Disponible pour un stage, une collaboration ou simplement pour échanger !</p>
+  </div>
+  <div class="contact-layout-main">
+    <div>
+      <div class="band-label reveal">Mes réseaux</div>
+      <div class="contact-cards-grid">
+        <a class="contact-card cc-email reveal" href="mailto:marius.holay10@gmail.com"><div class="cc-icon" style="background:linear-gradient(135deg,var(--violet-l),var(--violet));">✉</div><div><span class="cc-name">Email</span><span class="cc-handle">marius.holay10@gmail.com</span></div></a>
+        <a class="contact-card cc-instagram reveal" href="https://instagram.com/h_marius_" target="_blank"><div class="cc-icon" style="background:linear-gradient(135deg,#f09433,#dc2743,#bc1888);">📷</div><div><span class="cc-name">Instagram</span><span class="cc-handle">@h_marius_</span></div></a>
+        <a class="contact-card cc-snapchat reveal" href="#"><div class="cc-icon" style="background:#FFFC00;color:#000;">👻</div><div><span class="cc-name">Snapchat</span><span class="cc-handle">mariusholay</span></div></a>
+        <a class="contact-card cc-discord reveal" href="#"><div class="cc-icon" style="background:#5865F2;">🎮</div><div><span class="cc-name">Discord</span><span class="cc-handle">Kashh__ #8789</span></div></a>
+        <a class="contact-card cc-linkedin reveal" href="https://linkedin.com/in/mariusholay" target="_blank"><div class="cc-icon" style="background:#0077B5;">in</div><div><span class="cc-name">LinkedIn</span><span class="cc-handle">mariusholay</span></div></a>
+        <a class="contact-card cc-github reveal" href="https://github.com/Mariusholay10-UX" target="_blank"><div class="cc-icon" style="background:linear-gradient(135deg,#24292e,#586069);">⌥</div><div><span class="cc-name">GitHub</span><span class="cc-handle">Mariusholay10-UX</span></div></a>
+        <a class="contact-card cc-location reveal" href="#" style="grid-column:1/-1;"><div class="cc-icon" style="background:linear-gradient(135deg,var(--sakura),var(--violet-l));">📍</div><div><span class="cc-name">Localisation</span><span class="cc-handle">Aulnoye-Aymeries, France</span></div></a>
       </div>
     </div>
-  </div>
- 
-  <!-- Form section -->
-  <div class="contact-form-section">
-    <div class="contact-form-inner">
-      <div class="form-aside">
-        <h3>Envoyez-moi un message directement 💌</h3>
-        <p>Que ce soit pour une collaboration, un stage, ou simplement pour échanger — je suis à votre écoute et réponds rapidement.</p>
-        <!-- Mini stats -->
-        <div style="display:flex;flex-direction:column;gap:1rem;">
-          <div class="bstat" style="background:var(--soft);">
-            <div class="bstat-num" style="color:var(--violet);font-size:1.8rem;">24h</div>
-            <div class="bstat-label" style="color:var(--muted);">Délai de réponse moyen</div>
-          </div>
-          <div class="bstat" style="background:var(--soft);">
-            <div class="bstat-num" style="color:var(--violet);font-size:1.8rem;">✓</div>
-            <div class="bstat-label" style="color:var(--muted);">Disponible pour un stage</div>
-          </div>
-        </div>
-      </div>
-      <div class="form-card">
-        <div class="form-group"><label class="form-label">Votre nom</label><input type="text" class="form-input" placeholder="Tanaka Hiroshi"></div>
-        <div class="form-group"><label class="form-label">Adresse e-mail</label><input type="email" class="form-input" placeholder="email@exemple.com"></div>
-        <div class="form-group"><label class="form-label">Sujet</label><input type="text" class="form-input" placeholder="Proposition de stage, question..."></div>
-        <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" placeholder="Votre message ici..."></textarea></div>
-        <button class="btn btn-primary" style="width:100%;text-align:center;">Envoyer le message 🌸</button>
-      </div>
+    <div class="form-card reveal-right">
+      <h3 class="form-title">Envoyer un message 💌</h3>
+      <div class="form-group"><label class="form-label">Votre nom</label><input type="text" class="form-input" placeholder="Tanaka Hiroshi"></div>
+      <div class="form-group"><label class="form-label">Adresse e-mail</label><input type="email" class="form-input" placeholder="email@exemple.com"></div>
+      <div class="form-group"><label class="form-label">Sujet</label><input type="text" class="form-input" placeholder="Proposition de stage..."></div>
+      <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" placeholder="Votre message ici..."></textarea></div>
+      <button class="btn btn-primary" style="width:100%;text-align:center;">Envoyer 🌸</button>
     </div>
   </div>
 </section>
- 
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-blob"></div>
@@ -785,19 +686,141 @@ footer{
     <div class="footer-right">© 2025 · Marius Holay<br>Aulnoye-Aymeries, France<br>BUT Informatique</div>
   </div>
 </footer>
- 
+
 <script>
-function showPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  const t=document.getElementById(id);
-  if(t){t.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
-  if(id==='skills'){
-    setTimeout(()=>document.querySelectorAll('.skill-bar-fill').forEach(b=>b.classList.add('animated')),200);
-  }
+/* ══ CURSOR ══ */
+const dot = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  dot.style.left=mx+'px'; dot.style.top=my+'px';
+  spawnTrailPetal(mx,my);
+});
+
+function animateRing(){
+  rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(animateRing);
 }
- 
-// Petals
-const PC=['#f2a7c3','#fce4ef','#fbd5e4','#e8a0b8','#f9d0dc'];
+animateRing();
+
+// Hover effect on interactive elements
+document.querySelectorAll('a,button,.btn,.pill,.stag,.project-card,.bstat,.astat,.contact-card,.nav-links a,.nav-logo').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+});
+
+/* Sakura trail */
+const PC=['#f2a7c3','#fce4ef','#fbd5e4','#e8a0b8','#f9c8dc'];
+let lastTrail=0;
+function spawnTrailPetal(x,y){
+  const now=Date.now();
+  if(now-lastTrail<60)return;
+  lastTrail=now;
+  const p=document.createElement('div');
+  p.className='trail-petal';
+  const s=Math.random()*8+4;
+  p.style.cssText=`width:${s}px;height:${s}px;left:${x-s/2}px;top:${y-s/2}px;background:${PC[Math.floor(Math.random()*PC.length)]};`;
+  document.body.appendChild(p);
+  setTimeout(()=>p.remove(),800);
+}
+
+/* Click burst */
+document.addEventListener('click',e=>{
+  for(let i=0;i<8;i++){
+    const b=document.createElement('div');
+    b.className='click-burst';
+    const s=Math.random()*12+6;
+    const angle=Math.random()*360;
+    const dist=Math.random()*40+20;
+    const dx=Math.cos(angle*Math.PI/180)*dist;
+    const dy=Math.sin(angle*Math.PI/180)*dist;
+    b.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-s/2}px;top:${e.clientY-s/2}px;background:${PC[Math.floor(Math.random()*PC.length)]};border-radius:50%;`;
+    b.animate([
+      {transform:'translate(0,0) scale(1)',opacity:1},
+      {transform:`translate(${dx}px,${dy}px) scale(0)`,opacity:0}
+    ],{duration:600,easing:'cubic-bezier(.16,1,.3,1)',fill:'forwards'});
+    document.body.appendChild(b);
+    setTimeout(()=>b.remove(),700);
+  }
+});
+
+/* ══ INK TRANSITION ══ */
+const inkCircle=document.getElementById('ink-circle');
+let currentPage='home';
+
+function showPage(id){
+  if(id===currentPage)return;
+  const clickX=mx, clickY=my;
+  // Size to cover entire screen
+  const maxDist=Math.sqrt(Math.max(clickX,window.innerWidth-clickX)**2+Math.max(clickY,window.innerHeight-clickY)**2)*2.2;
+
+  inkCircle.style.left=clickX+'px';
+  inkCircle.style.top=clickY+'px';
+  inkCircle.style.width='0px';
+  inkCircle.style.height='0px';
+  inkCircle.style.transition='none';
+  inkCircle.style.opacity='1';
+
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      inkCircle.style.transition='width .65s cubic-bezier(.4,0,.2,1),height .65s cubic-bezier(.4,0,.2,1)';
+      inkCircle.style.width=maxDist+'px';
+      inkCircle.style.height=maxDist+'px';
+    });
+  });
+
+  setTimeout(()=>{
+    // Switch page
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    currentPage=id;
+    window.scrollTo({top:0});
+
+    // Update nav active
+    document.querySelectorAll('.nav-links a').forEach(a=>{
+      a.classList.toggle('active-link',a.dataset.page===id);
+    });
+
+    // Trigger reveals
+    setTimeout(triggerReveals,100);
+
+    // Skills bars
+    if(id==='skills'){
+      setTimeout(()=>document.querySelectorAll('.skill-bar-fill').forEach(b=>b.classList.add('animated')),400);
+    }
+
+    // Shrink ink out
+    inkCircle.style.transition='width .5s cubic-bezier(.4,0,.2,1),height .5s cubic-bezier(.4,0,.2,1),opacity .3s';
+    inkCircle.style.opacity='0';
+    setTimeout(()=>{
+      inkCircle.style.width='0px';
+      inkCircle.style.height='0px';
+      inkCircle.style.opacity='1';
+    },500);
+
+  },400);
+}
+
+/* ══ SCROLL REVEAL ══ */
+function triggerReveals(){
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}
+    });
+  },{threshold:.12});
+  document.querySelectorAll('.page.active .reveal,.page.active .reveal-left,.page.active .reveal-right').forEach(el=>{
+    el.classList.remove('visible');
+    observer.observe(el);
+  });
+}
+
+// Initial trigger
+setTimeout(triggerReveals,100);
+
+/* ══ FALLING PETALS ══ */
 function createPetal(){
   if(!document.getElementById('home').classList.contains('active'))return;
   const p=document.createElement('div');
@@ -808,8 +831,8 @@ function createPetal(){
   setTimeout(()=>p.remove(),18000);
 }
 setInterval(createPetal,650);
- 
-// Skill bars observer
+
+/* ══ SKILL BARS on scroll ══ */
 const sm=document.getElementById('skillsMain');
 if(sm){new IntersectionObserver(e=>{if(e[0].isIntersecting)document.querySelectorAll('.skill-bar-fill').forEach(b=>b.classList.add('animated'));},{threshold:.3}).observe(sm);}
 </script>
